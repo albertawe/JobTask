@@ -5,6 +5,7 @@ import axios from "axios";
 const ROOT_URL = 'http://127.0.0.1:8000/api';
 
 export const FETCH_JOBPOST = "FETCH_JOBPOST";
+export const FETCH_JOBPOSTBYPAGE = "FETCH_JOBPOSTBYPAGE";
 export const FETCH_MESSAGE = "FETCH_MESSAGE";
 export const RESET_ACTION = "RESET_ACTION";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
@@ -31,6 +32,15 @@ export function PostMessage(datauser,values) {
 
   return {
     type: POST_MESSAGE,
+    payload: request
+  };
+}
+
+export function fetchjobbypage(page) {
+  const url = page;
+  const request = axios.get(url);
+  return {
+    type: FETCH_JOBPOSTBYPAGE,
     payload: request
   };
 }

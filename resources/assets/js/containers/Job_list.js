@@ -1,72 +1,134 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Row, ButtonToolbar, Button} from 'react-bootstrap';
+import {
+  Row,
+  ButtonToolbar,
+  Button,
+  Pagination,
+  PaginationItem,
+  PaginationItemProps
+} from "react-bootstrap";
 import { bindActionCreators } from "redux";
-import { fetchjobpost, reset, fetchjobcategory } from "../actions/index";
-import { JobListItem } from './Job_list_item';
+import {
+  fetchjobpost,
+  reset,
+  fetchjobcategory,
+  fetchjobbypage
+} from "../actions/index";
+import { JobListItem } from "./Job_list_item";
 
 class JobList extends Component {
-  
-  componentDidMount(){
-    this.props.fetchjobpost('');
+  componentDidMount() {
+    this.props.fetchjobpost("");
     this.props.fetchjobcategory();
   }
-  // componentDidMount() {
-  //   console.log(this.props.job);
-  // }
-  // handleClick(category){
-  //   return () =>{
-  //     this.setState({
-          
-  //     })
-  //   }
-  // }
-  handleClick(category){
+  handleClick(category) {
     this.props.reset();
     this.props.fetchjobpost(category);
   }
-
-  renderCategory(){
-    return this.props.category.category.map(comment => { return comment.map(
-      comm => { return (
-          <Button key={comm.id} bsStyle="warning" onClick={() => this.handleClick(comm.category)}>{comm.category}</Button>
-      )
+  handlePageClick(page) {
+    this.props.reset();
+    this.props.fetchjobbypage(page);
+  }
+  handlenextnull(page) {
+    return (
+      <div className="pagination" id={page.current_page}>
+        <Pagination.First
+          onClick={() => this.handlePageClick(page.first_page_url)}
+        />
+        <Pagination.Prev
+          onClick={() => this.handlePageClick(page.prev_page_url)}
+        />
+        <Pagination.Item active>{page.current_page}</Pagination.Item>
+        <Pagination.Next disabled />
+        <Pagination.Last
+          onClick={() => this.handlePageClick(page.last_page_url)}
+        />
+      </div>
+    );
+  }
+  handlenonull(page) {
+    return (
+      <div className="pagination" id={page.current_page}>
+        <Pagination.First
+          onClick={() => this.handlePageClick(page.first_page_url)}
+        />
+        <Pagination.Prev
+          onClick={() => this.handlePageClick(page.prev_page_url)}
+        />
+        <Pagination.Item active>{page.current_page}</Pagination.Item>
+        <Pagination.Next
+          onClick={() => this.handlePageClick(page.next_page_url)}
+        />
+        <Pagination.Last
+          onClick={() => this.handlePageClick(page.last_page_url)}
+        />
+      </div>
+    );
+  }
+  handleprevnull(page) {
+    return (
+      <div className="pagination" id={page.current_page}>
+        <Pagination.First
+          onClick={() => this.handlePageClick(page.first_page_url)}
+        />
+        <Pagination.Prev disabled />
+        <Pagination.Item active>{page.current_page}</Pagination.Item>
+        <Pagination.Next
+          onClick={() => this.handlePageClick(page.next_page_url)}
+        />
+        <Pagination.Last
+          onClick={() => this.handlePageClick(page.last_page_url)}
+        />
+      </div>
+    );
+  }
+  renderCategory() {
+    return this.props.category.category.map(comment => {
+      return comment.map(comm => {
+        return (
+          <Button
+            key={comm.id}
+            bsStyle="warning"
+            onClick={() => this.handleClick(comm.category)}
+          >
+            {comm.category}
+          </Button>
+        );
       });
+    });
+  }
+  renderPagination() {
+    var a = this.props.job.job;
+    return a.map(page => {
+      if (page.next_page_url == null) {
+        return this.handlenextnull(page);
+      } else if (page.prev_page_url == null) {
+        return this.handleprevnull(page);
+      } else {
+        return this.handlenonull(page);
+      }
     });
   }
 
   renderJobList() {
-    //console.log(this.props.job.job[0])
-    // return this.props.job.job.map(comment => {
-    //   return <li key={comment.id}>{comment.title}</li>;
-    // });
-    return this.props.job.job.map(comment => { return comment.map(
-      comm => { return (
-        <JobListItem
-        jobs={comm}
-        key={comm.id}
-        />
-      )
+    return this.props.job.job.map(comment => {
+      return comment.data.map(comm => {
+        return <JobListItem jobs={comm} key={comm.id} />;
       });
     });
   }
 
   render() {
-    const { post } = this.props;
-
-    if (!post) {
-      return <div>Loading...</div>;
-    }
     return (
       <div>
         <Row>
-        <ButtonToolbar>
-        {this.renderCategory()}
-        </ButtonToolbar>
+          <ButtonToolbar>{this.renderCategory()}</ButtonToolbar>
         </Row>
         <br />
+        <Row>{this.renderJobList()}</Row>
         <Row>
-        {this.renderJobList()}
+          <Pagination bsSize="large">{this.renderPagination()}</Pagination>
         </Row>
       </div>
     );
@@ -74,12 +136,16 @@ class JobList extends Component {
 }
 
 function mapStateToProps(state) {
-  return { job: state,
-           category: state
-  };
+  return { job: state, category: state };
 }
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchjobpost, reset, fetchjobcategory }, dispatch);
+  return bindActionCreators(
+    { fetchjobpost, reset, fetchjobcategory, fetchjobbypage },
+    dispatch
+  );
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(JobList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(JobList);

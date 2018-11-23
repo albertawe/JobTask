@@ -2560,15 +2560,17 @@ function isArrayLike(value) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FETCH_JOBPOST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_MESSAGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return RESET_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_JOBPOSTBYPAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return FETCH_MESSAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return RESET_ACTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FETCH_CATEGORY; });
 /* unused harmony export POST_MESSAGE */
-/* harmony export (immutable) */ __webpack_exports__["i"] = reset;
-/* harmony export (immutable) */ __webpack_exports__["h"] = fetchmessage;
-/* harmony export (immutable) */ __webpack_exports__["d"] = PostMessage;
-/* harmony export (immutable) */ __webpack_exports__["g"] = fetchjobpost;
-/* harmony export (immutable) */ __webpack_exports__["f"] = fetchjobcategory;
+/* harmony export (immutable) */ __webpack_exports__["k"] = reset;
+/* harmony export (immutable) */ __webpack_exports__["j"] = fetchmessage;
+/* harmony export (immutable) */ __webpack_exports__["e"] = PostMessage;
+/* harmony export (immutable) */ __webpack_exports__["g"] = fetchjobbypage;
+/* harmony export (immutable) */ __webpack_exports__["i"] = fetchjobpost;
+/* harmony export (immutable) */ __webpack_exports__["h"] = fetchjobcategory;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(409);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
@@ -2578,6 +2580,7 @@ function isArrayLike(value) {
 var ROOT_URL = 'http://127.0.0.1:8000/api';
 
 var FETCH_JOBPOST = "FETCH_JOBPOST";
+var FETCH_JOBPOSTBYPAGE = "FETCH_JOBPOSTBYPAGE";
 var FETCH_MESSAGE = "FETCH_MESSAGE";
 var RESET_ACTION = "RESET_ACTION";
 var FETCH_CATEGORY = "FETCH_CATEGORY";
@@ -2603,6 +2606,15 @@ function PostMessage(datauser, values) {
 
   return {
     type: POST_MESSAGE,
+    payload: request
+  };
+}
+
+function fetchjobbypage(page) {
+  var url = page;
+  var request = __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url);
+  return {
+    type: FETCH_JOBPOSTBYPAGE,
     payload: request
   };
 }
@@ -8073,7 +8085,7 @@ module.exports = isObjectLike;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__Pager__ = __webpack_require__(385);
 /* unused harmony reexport Pager */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__Pagination__ = __webpack_require__(386);
-/* unused harmony reexport Pagination */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_49__Pagination__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__Panel__ = __webpack_require__(388);
 /* unused harmony reexport Panel */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__PanelGroup__ = __webpack_require__(147);
@@ -8087,7 +8099,7 @@ module.exports = isObjectLike;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__ResponsiveEmbed__ = __webpack_require__(397);
 /* unused harmony reexport ResponsiveEmbed */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__Row__ = __webpack_require__(398);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_56__Row__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_56__Row__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__SafeAnchor__ = __webpack_require__(18);
 /* unused harmony reexport SafeAnchor */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__SplitButton__ = __webpack_require__(399);
@@ -42816,7 +42828,7 @@ Pagination.Ellipsis = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["a" /* Ellip
 Pagination.Item = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["f" /* default */];
 Pagination.Next = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["d" /* Next */];
 Pagination.Last = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["c" /* Last */];
-/* unused harmony default export */ var _unused_webpack_default_export = (Pagination);
+/* harmony default export */ __webpack_exports__["a"] = (Pagination);
 
 /***/ }),
 /* 387 */
@@ -54515,9 +54527,10 @@ var INITIAL_STATE = [];
 
   switch (action.type) {
     case __WEBPACK_IMPORTED_MODULE_0__actions_index__["b" /* FETCH_JOBPOST */]:
-      console.log([action.payload.data].concat(_toConsumableArray(state)));
       return [action.payload.data].concat(_toConsumableArray(state));
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["e" /* RESET_ACTION */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["c" /* FETCH_JOBPOSTBYPAGE */]:
+      return [action.payload.data].concat(_toConsumableArray(state));
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["f" /* RESET_ACTION */]:
       return INITIAL_STATE;
   }
   return state;
@@ -54561,9 +54574,9 @@ var INITIAL_STATE = [];
   var action = arguments[1];
 
   switch (action.type) {
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["c" /* FETCH_MESSAGE */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["d" /* FETCH_MESSAGE */]:
       return [action.payload.data].concat(_toConsumableArray(state));
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["e" /* RESET_ACTION */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["f" /* RESET_ACTION */]:
       return INITIAL_STATE;
   }
   return state;
@@ -54957,7 +54970,7 @@ var MessageList = function (_Component) {
         "div",
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Row */],
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* Row */],
           null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* ButtonToolbar */],
@@ -54978,7 +54991,7 @@ function mapStateToProps(state) {
   };
 }
 function mapDispatchToProps(dispatch) {
-  return Object(__WEBPACK_IMPORTED_MODULE_3_redux__["b" /* bindActionCreators */])({ fetchmessage: __WEBPACK_IMPORTED_MODULE_4__actions_index__["h" /* fetchmessage */], reset: __WEBPACK_IMPORTED_MODULE_4__actions_index__["i" /* reset */] }, dispatch);
+  return Object(__WEBPACK_IMPORTED_MODULE_3_redux__["b" /* bindActionCreators */])({ fetchmessage: __WEBPACK_IMPORTED_MODULE_4__actions_index__["j" /* fetchmessage */], reset: __WEBPACK_IMPORTED_MODULE_4__actions_index__["k" /* reset */] }, dispatch);
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(MessageList));
@@ -55145,7 +55158,7 @@ function validate(values) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return Object(__WEBPACK_IMPORTED_MODULE_4_redux__["b" /* bindActionCreators */])({ fetchmessage: __WEBPACK_IMPORTED_MODULE_3__actions__["h" /* fetchmessage */], reset: __WEBPACK_IMPORTED_MODULE_3__actions__["i" /* reset */], PostMessage: __WEBPACK_IMPORTED_MODULE_3__actions__["d" /* PostMessage */] }, dispatch);
+  return Object(__WEBPACK_IMPORTED_MODULE_4_redux__["b" /* bindActionCreators */])({ fetchmessage: __WEBPACK_IMPORTED_MODULE_3__actions__["j" /* fetchmessage */], reset: __WEBPACK_IMPORTED_MODULE_3__actions__["k" /* reset */], PostMessage: __WEBPACK_IMPORTED_MODULE_3__actions__["e" /* PostMessage */] }, dispatch);
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_redux_form__["c" /* reduxForm */])({

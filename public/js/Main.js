@@ -2560,15 +2560,17 @@ function isArrayLike(value) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FETCH_JOBPOST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_MESSAGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return RESET_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_JOBPOSTBYPAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return FETCH_MESSAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return RESET_ACTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FETCH_CATEGORY; });
 /* unused harmony export POST_MESSAGE */
-/* harmony export (immutable) */ __webpack_exports__["i"] = reset;
-/* harmony export (immutable) */ __webpack_exports__["h"] = fetchmessage;
-/* harmony export (immutable) */ __webpack_exports__["d"] = PostMessage;
-/* harmony export (immutable) */ __webpack_exports__["g"] = fetchjobpost;
-/* harmony export (immutable) */ __webpack_exports__["f"] = fetchjobcategory;
+/* harmony export (immutable) */ __webpack_exports__["k"] = reset;
+/* harmony export (immutable) */ __webpack_exports__["j"] = fetchmessage;
+/* harmony export (immutable) */ __webpack_exports__["e"] = PostMessage;
+/* harmony export (immutable) */ __webpack_exports__["g"] = fetchjobbypage;
+/* harmony export (immutable) */ __webpack_exports__["i"] = fetchjobpost;
+/* harmony export (immutable) */ __webpack_exports__["h"] = fetchjobcategory;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(409);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
@@ -2578,6 +2580,7 @@ function isArrayLike(value) {
 var ROOT_URL = 'http://127.0.0.1:8000/api';
 
 var FETCH_JOBPOST = "FETCH_JOBPOST";
+var FETCH_JOBPOSTBYPAGE = "FETCH_JOBPOSTBYPAGE";
 var FETCH_MESSAGE = "FETCH_MESSAGE";
 var RESET_ACTION = "RESET_ACTION";
 var FETCH_CATEGORY = "FETCH_CATEGORY";
@@ -2603,6 +2606,15 @@ function PostMessage(datauser, values) {
 
   return {
     type: POST_MESSAGE,
+    payload: request
+  };
+}
+
+function fetchjobbypage(page) {
+  var url = page;
+  var request = __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url);
+  return {
+    type: FETCH_JOBPOSTBYPAGE,
     payload: request
   };
 }
@@ -8073,7 +8085,7 @@ module.exports = isObjectLike;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__Pager__ = __webpack_require__(385);
 /* unused harmony reexport Pager */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__Pagination__ = __webpack_require__(386);
-/* unused harmony reexport Pagination */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_49__Pagination__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__Panel__ = __webpack_require__(388);
 /* unused harmony reexport Panel */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__PanelGroup__ = __webpack_require__(147);
@@ -8087,7 +8099,7 @@ module.exports = isObjectLike;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__ResponsiveEmbed__ = __webpack_require__(397);
 /* unused harmony reexport ResponsiveEmbed */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__Row__ = __webpack_require__(398);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_56__Row__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_56__Row__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__SafeAnchor__ = __webpack_require__(18);
 /* unused harmony reexport SafeAnchor */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__SplitButton__ = __webpack_require__(399);
@@ -42816,7 +42828,7 @@ Pagination.Ellipsis = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["a" /* Ellip
 Pagination.Item = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["f" /* default */];
 Pagination.Next = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["d" /* Next */];
 Pagination.Last = __WEBPACK_IMPORTED_MODULE_5__PaginationItem__["c" /* Last */];
-/* unused harmony default export */ var _unused_webpack_default_export = (Pagination);
+/* harmony default export */ __webpack_exports__["a"] = (Pagination);
 
 /***/ }),
 /* 387 */
@@ -54515,9 +54527,10 @@ var INITIAL_STATE = [];
 
   switch (action.type) {
     case __WEBPACK_IMPORTED_MODULE_0__actions_index__["b" /* FETCH_JOBPOST */]:
-      console.log([action.payload.data].concat(_toConsumableArray(state)));
       return [action.payload.data].concat(_toConsumableArray(state));
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["e" /* RESET_ACTION */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["c" /* FETCH_JOBPOSTBYPAGE */]:
+      return [action.payload.data].concat(_toConsumableArray(state));
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["f" /* RESET_ACTION */]:
       return INITIAL_STATE;
   }
   return state;
@@ -54561,9 +54574,9 @@ var INITIAL_STATE = [];
   var action = arguments[1];
 
   switch (action.type) {
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["c" /* FETCH_MESSAGE */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["d" /* FETCH_MESSAGE */]:
       return [action.payload.data].concat(_toConsumableArray(state));
-    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["e" /* RESET_ACTION */]:
+    case __WEBPACK_IMPORTED_MODULE_0__actions_index__["f" /* RESET_ACTION */]:
       return INITIAL_STATE;
   }
   return state;
@@ -54699,75 +54712,170 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var JobList = function (_Component) {
   _inherits(JobList, _Component);
 
-  function JobList(props, context) {
+  function JobList() {
     _classCallCheck(this, JobList);
 
-    var _this = _possibleConstructorReturn(this, (JobList.__proto__ || Object.getPrototypeOf(JobList)).call(this, props, context));
-
-    _this.state = {
-      open: true
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (JobList.__proto__ || Object.getPrototypeOf(JobList)).apply(this, arguments));
   }
 
   _createClass(JobList, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.fetchjobpost('');
+      this.props.fetchjobpost("");
       this.props.fetchjobcategory();
     }
-    // componentDidMount() {
-    //   console.log(this.props.job);
-    // }
-    // handleClick(category){
-    //   return () =>{
-    //     this.setState({
-
-    //     })
-    //   }
-    // }
-
   }, {
     key: "handleClick",
     value: function handleClick(category) {
-
       this.props.reset();
       this.props.fetchjobpost(category);
     }
   }, {
+    key: "handlePageClick",
+    value: function handlePageClick(page) {
+      this.props.reset();
+      this.props.fetchjobbypage(page);
+    }
+  }, {
+    key: "handlenextnull",
+    value: function handlenextnull(page) {
+      var _this2 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "pagination", id: page.current_page },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].First, {
+          onClick: function onClick() {
+            return _this2.handlePageClick(page.first_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Prev, {
+          onClick: function onClick() {
+            return _this2.handlePageClick(page.prev_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Item,
+          { active: true },
+          page.current_page
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Next, { disabled: true }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Last, {
+          onClick: function onClick() {
+            return _this2.handlePageClick(page.last_page_url);
+          }
+        })
+      );
+    }
+  }, {
+    key: "handlenonull",
+    value: function handlenonull(page) {
+      var _this3 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "pagination", id: page.current_page },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].First, {
+          onClick: function onClick() {
+            return _this3.handlePageClick(page.first_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Prev, {
+          onClick: function onClick() {
+            return _this3.handlePageClick(page.prev_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Item,
+          { active: true },
+          page.current_page
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Next, {
+          onClick: function onClick() {
+            return _this3.handlePageClick(page.next_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Last, {
+          onClick: function onClick() {
+            return _this3.handlePageClick(page.last_page_url);
+          }
+        })
+      );
+    }
+  }, {
+    key: "handleprevnull",
+    value: function handleprevnull(page) {
+      var _this4 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "pagination", id: page.current_page },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].First, {
+          onClick: function onClick() {
+            return _this4.handlePageClick(page.first_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Prev, { disabled: true }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Item,
+          { active: true },
+          page.current_page
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Next, {
+          onClick: function onClick() {
+            return _this4.handlePageClick(page.next_page_url);
+          }
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */].Last, {
+          onClick: function onClick() {
+            return _this4.handlePageClick(page.last_page_url);
+          }
+        })
+      );
+    }
+  }, {
     key: "renderCategory",
     value: function renderCategory() {
-      var _this2 = this;
+      var _this5 = this;
 
       return this.props.category.category.map(function (comment) {
         return comment.map(function (comm) {
           return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["d" /* Fade */],
-            { "in": _this2.state.open },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-              __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
-              { key: comm.id, bsStyle: "warning", onClick: function onClick() {
-                  return _this2.handleClick(comm.category);
-                } },
-              comm.category
-            )
+            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["a" /* Button */],
+            {
+              key: comm.id,
+              bsStyle: "warning",
+              onClick: function onClick() {
+                return _this5.handleClick(comm.category);
+              }
+            },
+            comm.category
           );
         });
       });
     }
   }, {
+    key: "renderPagination",
+    value: function renderPagination() {
+      var _this6 = this;
+
+      var a = this.props.job.job;
+      return a.map(function (page) {
+        if (page.next_page_url == null) {
+          return _this6.handlenextnull(page);
+        } else if (page.prev_page_url == null) {
+          return _this6.handleprevnull(page);
+        } else {
+          return _this6.handlenonull(page);
+        }
+      });
+    }
+  }, {
     key: "renderJobList",
     value: function renderJobList() {
-      //console.log(this.props.job.job[0])
-      // return this.props.job.job.map(comment => {
-      //   return <li key={comment.id}>{comment.title}</li>;
-      // });
       return this.props.job.job.map(function (comment) {
-        return comment.map(function (comm) {
-          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__Job_list_item__["a" /* JobListItem */], {
-            jobs: comm,
-            key: comm.id
-          });
+        return comment.data.map(function (comm) {
+          return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__Job_list_item__["a" /* JobListItem */], { jobs: comm, key: comm.id });
         });
       });
     }
@@ -54778,7 +54886,7 @@ var JobList = function (_Component) {
         "div",
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Row */],
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* Row */],
           null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["b" /* ButtonToolbar */],
@@ -54788,9 +54896,18 @@ var JobList = function (_Component) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Row */],
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* Row */],
           null,
           this.renderJobList()
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["f" /* Row */],
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_2_react_bootstrap__["e" /* Pagination */],
+            { bsSize: "large" },
+            this.renderPagination()
+          )
         )
       );
     }
@@ -54800,12 +54917,10 @@ var JobList = function (_Component) {
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 function mapStateToProps(state) {
-  return { job: state,
-    category: state
-  };
+  return { job: state, category: state };
 }
 function mapDispatchToProps(dispatch) {
-  return Object(__WEBPACK_IMPORTED_MODULE_3_redux__["b" /* bindActionCreators */])({ fetchjobpost: __WEBPACK_IMPORTED_MODULE_4__actions_index__["g" /* fetchjobpost */], reset: __WEBPACK_IMPORTED_MODULE_4__actions_index__["i" /* reset */], fetchjobcategory: __WEBPACK_IMPORTED_MODULE_4__actions_index__["f" /* fetchjobcategory */] }, dispatch);
+  return Object(__WEBPACK_IMPORTED_MODULE_3_redux__["b" /* bindActionCreators */])({ fetchjobpost: __WEBPACK_IMPORTED_MODULE_4__actions_index__["i" /* fetchjobpost */], reset: __WEBPACK_IMPORTED_MODULE_4__actions_index__["k" /* reset */], fetchjobcategory: __WEBPACK_IMPORTED_MODULE_4__actions_index__["h" /* fetchjobcategory */], fetchjobbypage: __WEBPACK_IMPORTED_MODULE_4__actions_index__["g" /* fetchjobbypage */] }, dispatch);
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(JobList));

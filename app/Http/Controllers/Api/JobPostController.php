@@ -11,12 +11,15 @@ use App\PaymentDetail;
 class JobPostController extends Controller
 {
     public function getAllJobPost(){
-        $jobs = JobPost::where('status','not assigned')->get();
+        $jobs = JobPost::where('status','not assigned')->paginate(6);
         //$job_post = JobPost::get();
         return $jobs;
     }
     public function getJobPostByCategory($id){
-        $jobs = JobPost::where('job_category',$id)->get();
+        $jobs = JobPost::where([
+            'job_category' => $id,
+            'status'       => 'not assigned'
+        ])->paginate(6);
         return $jobs;
     }
     public function getJobPost($id){
