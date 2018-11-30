@@ -6,6 +6,21 @@
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 							<span class="heading-meta">View Task Info</span>
 							<h2 class="colorlib-heading">All you need to know about this task</h2>
+							@if( $uid == $taskdetails->posted_by_id)
+							<h4><a href="/posttasks/{{$taskdetails->id}}">Edit this task's information </a></h4>
+							<form method="post" action="/uploadpic/{{$taskdetails->id}}" enctype="multipart/form-data">
+									@csrf
+									<div class="input-group control-group increment">
+											<div class="form-group">
+												<span class="heading-meta">upload new image</span>
+												<input type="file" name="pic[]" class="form-control" multiple>
+											</div>
+									</div>
+									<div class="form-group">
+											<input type="submit" class="btn btn-primary btn-send-message" value="Edit your task">
+									</div>
+							</form>
+							@endif
 						</div>
 				</div>
 					<div class="col-md-7 col-md-push-1">
@@ -21,6 +36,15 @@
                                 <p>Due Date: {{$taskdetails->due_date}}</p>
                                 <p>Address: {{$taskdetails->address}}</p>
                                 <p>Job Description: {{$taskdetails->job_description}}</p>
+								@if($taskdetails->images)
+								@foreach(json_decode($taskdetails->images, true) as $image)
+								<div class="itm" style="width: 300px; 
+    							height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
+								 ">
+								<img src="{{ URL::to('/images/'.$image)}}" >
+								 </div>
+								@endforeach
+								@endif
 								</span>
 							@if($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not assigned')
 							@foreach($offers as $offer)
@@ -40,7 +64,8 @@
 							@elseif($taskdetails->status == 'completed')
 							<p>this task is finished, poster is paid</p>
 							@elseif($taskdetails->status == 'not assigned')
-							<div class="row">
+							
+							<div class="row" style=>
 							<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
 									<form method="post" action="{{url('postoffer')}}" enctype="multipart/form-data">
 									@csrf

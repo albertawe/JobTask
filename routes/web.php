@@ -26,7 +26,10 @@ else {
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Auth::routes();
 Route::resource('dashboard','\App\Http\Controllers\root\UserProfileController')->middleware('auth');
-Route::resource('posttask','\App\Http\Controllers\root\JobPostController')->middleware('auth');
+Route::post('posttask','\App\Http\Controllers\root\JobPostController@store')->middleware('auth');
+Route::post('/uploadpic/{id}','\App\Http\Controllers\root\edittaskcontroller@uploadpic')->middleware('auth');
+Route::get('/posttasks/{id}','\App\Http\Controllers\root\edittaskcontroller@showtask')->middleware('auth');
+Route::patch('/posttasks/{id}','\App\Http\Controllers\root\edittaskcontroller@updatetask')->middleware('auth');
 Route::resource('browsetask','\App\Http\Controllers\root\BrowseTaskController')->middleware('auth');
 Route::resource('mytask','\App\Http\Controllers\root\MyTaskController')->middleware('auth');
 Route::resource('viewtask','\App\Http\Controllers\root\ViewJobController')->middleware('auth');

@@ -53,12 +53,27 @@ colorlib-active
 										<span class="heading-meta">Describe your task</span>
 											<textarea name="jobdescription" value="" id="jobdescription" cols="30" rows="7" class="form-control" placeholder="describe your task specificly" name="jobdescription"></textarea>
 										</div>
+										<div class="input-group control-group increment">
+										<div class="form-group">
+										<span class="heading-meta">upload image (if necessary)</span>
+										<input type="file" name="filename[]" class="form-control" multiple>
+										</div>
+										</div>
 										<div class="form-group">
 											<input type="submit" class="btn btn-primary btn-send-message" value="post your task">
 										</div>
 									</form>
 								</div>
-							
+								@if (count($errors) > 0)
+								<div class="alert alert-danger">
+									<strong>Whoops!</strong> There were some problems with your input.<br><br>
+									<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+									</ul>
+								</div>
+								@endif
 							</div>		
 							</div>
 					</div>

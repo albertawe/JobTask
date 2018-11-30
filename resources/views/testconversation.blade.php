@@ -5,8 +5,8 @@
 @section('content')
     <div class="colorlib-contact">
         <div class="colorlib-narrow-content">
-            <div class="row">
-                <div id="chatList" data='{{ $message->id }}' datauser='{{ Auth::user()->id }}'>
+            <!-- <div class="row" align="center"> -->
+                <div id="chatList" align="center" data='{{ $message->id }}' datauser='{{ Auth::user()->id }}'>
                 <script src="{{mix('/js/MainMessage.js')}}" ></script>
         <!-- @foreach($conversations as $conversation)
             <p>{{$conversation->user->user_profile->first_name}} {{$conversation->user->user_profile->last_name}} : {{$conversation->content}}</p>
@@ -20,7 +20,7 @@
                         <br><u><a href="/message">🡐 Back</a></u>
                     </form>
                 </div> -->
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 @endsection

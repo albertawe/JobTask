@@ -15,6 +15,12 @@ class Email extends Controller
             $message->from('s00000017107@student.uph.edu', $request->nama);
             $message->to('jobtaskerindonesia@gmail.com');
         });
+        Mail::send('email', ['nama' => $request->nama, 'pesan' => $request->pesan], function ($message) use ($request)
+        {
+            $message->subject($request->judul);
+            $message->from('jobtaskerindonesia@gmail.com');
+            $message->to($request->email);
+        });
         return back()->with('alert-success','Berhasil Kirim Email');
     }
     catch (Exception $e){

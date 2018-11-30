@@ -8,7 +8,7 @@ colorlib-active
 				<div class="row">
             <!-- Remove This Before You Start -->
             <div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-                <h2 class="colorlib-heading">Send us a message if you need help</h2>
+                <h2 class="colorlib-heading">Send us a message if you want to give feedback or report something to us</h2>
             </div>
             @if(\Session::has('alert-failed'))
                 <div class="alert alert-failed">

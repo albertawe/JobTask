@@ -15,8 +15,7 @@
                 @foreach($messages as $mes)
                     <div class="col-md-10 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
                         <div class="blog-entry">
-                            <!-- <a href="blog.html" class="blog-img"><img src="images/blog-1.jpg" class="img-responsive" alt="HTML5 Bootstrap Template by colorlib.com"></a> -->
-                            <div class="desc">
+                           <div class="desc">
                                 <h3><a href="viewcons/{{$mes->message_id}}" class="col-md-8">messages between {{$mes->user1_first_name}} {{$mes->user1_last_name}}
                                         and {{$mes->user2_first_name}} {{$mes->user2_last_name}}</a></h3>
                             </div>

@@ -66,6 +66,21 @@ class JobList extends Component {
       </div>
     );
   }
+  handlebothnull(page) {
+    return (
+      <div className="pagination" id={page.current_page}>
+        <Pagination.First
+          onClick={() => this.handlePageClick(page.first_page_url)}
+        />
+        <Pagination.Prev disabled />
+        <Pagination.Item active>{page.current_page}</Pagination.Item>
+        <Pagination.Next disabled />
+        <Pagination.Last
+          onClick={() => this.handlePageClick(page.last_page_url)}
+        />
+      </div>
+    );
+  }
   handleprevnull(page) {
     return (
       <div className="pagination" id={page.current_page}>
@@ -105,6 +120,8 @@ class JobList extends Component {
         return this.handlenextnull(page);
       } else if (page.prev_page_url == null) {
         return this.handleprevnull(page);
+      } else if (page.prev_page_url == null && page.next_page_url == null) {
+        return this.handlebothnull(page);
       } else {
         return this.handlenonull(page);
       }
@@ -123,7 +140,16 @@ class JobList extends Component {
     return (
       <div>
         <Row>
-          <ButtonToolbar>{this.renderCategory()}</ButtonToolbar>
+          <ButtonToolbar>
+            <Button
+              key={99}
+              bsStyle="warning"
+              onClick={() => this.handleClick("")}
+            >
+              all
+            </Button>
+            {this.renderCategory()}
+          </ButtonToolbar>
         </Row>
         <br />
         <Row>{this.renderJobList()}</Row>

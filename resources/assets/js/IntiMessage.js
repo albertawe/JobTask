@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
@@ -10,19 +9,22 @@
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import React, { Component } from 'react';
-import MessageList from './containers/Message_list';
-import NewMessage from './containers/New_message';
-import { CSSTransition } from 'react-transition-group';
-
+import React, { Component } from "react";
+import MessageList from "./containers/Message_list";
+import NewMessage from "./containers/New_message";
+import { Row, Col } from "react-bootstrap";
 
 class IntiMessage extends Component {
   render() {
     return (
-      <div>
-      <MessageList />
-      <NewMessage />
-      </div>
+      <Row style={{marginLeft: 50}}>
+        <Col xs={12} md={8}>
+          <MessageList />
+        </Col>
+        <Col xs={6} md={4}>
+          <NewMessage />
+        </Col>
+      </Row>
     );
   }
 }

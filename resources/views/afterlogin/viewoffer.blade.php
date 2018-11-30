@@ -15,7 +15,6 @@ colorlib-active
                 @foreach($offers as $offer)
 						<div class="col-md-4 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
 							<div class="blog-entry">
-								<!-- <a href="blog.html" class="blog-img"><img src="images/blog-1.jpg" class="img-responsive" alt="HTML5 Bootstrap Template by colorlib.com"></a> -->
 								<div class="desc">
 								<h3><a href="viewtask/{{$offer->job_id}}">{{$offer->job_title}}</a></h3>
 									<span>Negotiation Price: <small>{{$offer->nego}}</small></br>

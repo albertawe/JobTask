@@ -8,6 +8,7 @@ use App\jobcategory;
 use App\JobPost;
 use Auth;
 use App\PaymentDetail;
+
 class JobPostController extends Controller
 {
     /**
@@ -39,6 +40,10 @@ class JobPostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'filename' => 'required',
+            'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
         $id = Auth::user()->id;
         $job_post = new JobPost;
         $payment_id = sprintf('P-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
@@ -53,6 +58,17 @@ class JobPostController extends Controller
         $job_post->job_description = $request->jobdescription;
         $payment = new PaymentDetail;
         $payment['payment_id'] = $payment_id;
+        if($request->hasfile('filename'))
+        {
+
+           foreach($request->file('filename') as $image)
+           {
+               $name=$image->getClientOriginalName();
+               $image->move(public_path().'/images/', $name);  
+               $data[] = $name;  
+           }
+        }
+        $job_post->images=json_encode($data);
         $payment->save();
         $job_post->save();
         return redirect('posttask');
@@ -66,7 +82,11 @@ class JobPostController extends Controller
      */
     public function show($id)
     {
-        //
+        $taskdetails = JobPost::find($id);
+        $time = strtotime($taskdetails->due_date);
+        $date = date('Y-m-d',$time);
+        $categories = jobcategory::all();
+        return view('afterlogin.edittask',compact('taskdetails','categories','date'));
     }
 
     /**
@@ -77,7 +97,7 @@ class JobPostController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -89,7 +109,34 @@ class JobPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request->image);
+        $this->validate($request, [
+            'filename' => 'required',
+            'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+        $uid = Auth::user()->id;
+        $job_post = JobPost::where('id',$id);
+        $job_post->title = $request->title;
+        $job_post->posted_by_id = $id;
+        $job_post->job_type = $request->type;
+        $job_post->job_category = $request->category;
+        $job_post->due_date = $request->duedate;
+        $job_post->price = $request->price;
+        $job_post->address = $request->address;
+        $job_post->job_description = $request->jobdescription;
+        if($request->hasfile('filename'))
+        {
+
+           foreach($request->file('filename') as $image)
+           {
+               $name=$image->getClientOriginalName();
+               $image->move(public_path().'/images/', $name);  
+               $data[] = $name;  
+           }
+        }
+        $job_post->images=json_encode($data);
+        $job_post->save();
+        return redirect('mytask');
     }
 
     /**

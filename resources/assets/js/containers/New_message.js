@@ -5,6 +5,7 @@ import { PostMessage, fetchmessage, reset } from "../actions";
 import { bindActionCreators } from "redux";
 
 class NewMessage extends Component {
+
   renderField(field) {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? "has-danger" : ""}`;
@@ -37,7 +38,7 @@ class NewMessage extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} style={{width: 250}}>
         <Field
           label="Chat Content"
           name="content"

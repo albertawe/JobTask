@@ -100,6 +100,10 @@
                             <a class="btn btn-link" href="{{ route('login') }}">
                                 Already registered?
                             </a>
+                            <br>
+                            <a class="btn btn-link" href="/">
+                                back to home
+                            </a>
                         </div>
                     </form>
                 </div>
