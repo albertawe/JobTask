@@ -115,13 +115,15 @@ class JobList extends Component {
   }
   renderPagination() {
     var a = this.props.job.job;
+    console.log(a);
     return a.map(page => {
-      if (page.next_page_url == null) {
+      if (page.prev_page_url == null && page.next_page_url == null) {
+        return this.handlebothnull(page);
+      }
+      else if (page.next_page_url == null) {
         return this.handlenextnull(page);
       } else if (page.prev_page_url == null) {
         return this.handleprevnull(page);
-      } else if (page.prev_page_url == null && page.next_page_url == null) {
-        return this.handlebothnull(page);
       } else {
         return this.handlenonull(page);
       }
@@ -154,7 +156,7 @@ class JobList extends Component {
         <br />
         <Row>{this.renderJobList()}</Row>
         <Row>
-          <Pagination bsSize="large">{this.renderPagination()}</Pagination>
+          <Pagination size="lg">{this.renderPagination()}</Pagination>
         </Row>
       </div>
     );

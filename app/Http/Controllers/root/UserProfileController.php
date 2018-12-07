@@ -26,8 +26,21 @@ class UserProfileController extends Controller
         $blogs = blog::all();
         Carbon::parse($user->user_profile->birthdate)->format('y/m/d');
         //dd($user_profile);
-        return view('afterlogin.home',compact('user','blogs','id'));
+        $salah = '';
+        return view('afterlogin.home',compact('user','blogs','id','salah'));
         //return $user_profile;
+    }
+
+    public function resetpass(Request $request){
+        $user = Auth::user()->get();
+        if(Hash::check($request->prevpassword, $user->password)) {
+            $user->password = Hash::make($request->password);
+            return redirect('dashboard');
+        }
+        else {
+            $salah = 'password sebelumnya tidak sesuai';
+            return redirect('dashboard')->with(compact('salah'));
+        }
     }
 
     /**

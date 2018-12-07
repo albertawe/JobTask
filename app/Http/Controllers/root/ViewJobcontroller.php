@@ -51,7 +51,7 @@ class ViewJobcontroller extends Controller
     {
         $taskdetails = JobPost::find($id);
         $user_id = Auth::user()->id;
-        $paymentdetails = PaymentDetail::where('payment_id',$taskdetails->payment_id)->get();
+        $paymentdetails = PaymentDetail::where('payment_id',$taskdetails->payment_id)->first();
         $offers = offer::where('job_id',$taskdetails->id)->get();
 //        dd($taskdetails);
         $uid = strval($user_id);

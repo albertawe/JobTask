@@ -47,7 +47,9 @@ class JobPostController extends Controller
         $id = Auth::user()->id;
         $job_post = new JobPost;
         $payment_id = sprintf('P-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
+        $invoice = sprintf('INV-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
         $job_post->payment_id = $payment_id;
+        $job_post->invoice = $invoice;
         $job_post->title = $request->title;
         $job_post->posted_by_id = $id;
         $job_post->job_type = $request->type;

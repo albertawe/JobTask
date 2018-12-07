@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Backpack\CRUD\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
+    use CrudTrait;
     use Notifiable;
 
     /**
@@ -17,6 +20,12 @@ class User extends Authenticatable
     protected $fillable = [
         'user_type_id', 'email', 'password',
     ];
+
+    const ADMIN_TYPE = 1;
+    const DEFAULT_TYPE = 2;
+    public function isAdmin()    {        
+        return $this->user_type_id === self::ADMIN_TYPE;    
+    }
 
     /**
      * The attributes that should be hidden for arrays.

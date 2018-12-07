@@ -5,6 +5,7 @@ namespace App\Http\Controllers\root;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\JobPost;
 use Carbon\Carbon;
 class ViewProfileController extends Controller
 {
@@ -48,9 +49,10 @@ class ViewProfileController extends Controller
     public function show($id)
     {
         $user = User::where('id', $id)->with(['user_skill', 'user_profile'])->first();
+        $jobs = JobPost::where([['assigned_tasker_id',$id],['status','finished']])->get();
         Carbon::parse($user->user_profile->birthdate)->format('y/m/d');
         //dd($user_profile);
-        return view('afterlogin.viewprofile',compact('user'));
+        return view('afterlogin.viewprofile',compact('user','jobs'));
     }
 
     /**

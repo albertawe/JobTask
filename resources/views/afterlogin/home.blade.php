@@ -5,6 +5,9 @@ colorlib-active
 @section('content')
 		<div class="colorlib-contact">
 			<div class="colorlib-narrow-content">
+			@if($errors->any())
+			<h4>{{$errors->first()}}</h4>
+			@endif
 				<div class="row">
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 							<span class="heading-meta">Dashboard</span>
@@ -24,7 +27,7 @@ colorlib-active
 						</div>
 				</div>
 					<div class="col-md-7 col-md-push-1">
-						<div class="colorlib-narrow-content">
+						<!-- <div class="colorlib-narrow-content"> -->
 							<div class="row">
 								<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
 								<span class="heading-meta">Your profile picture</span>
@@ -61,8 +64,7 @@ colorlib-active
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">More About You</span>
-											<textarea id="message" cols="30" rows="7" class="form-control" placeholder="tagline" name="tagline">
-											{{$user->user_profile->tagline}}</textarea>
+											<textarea id="message" cols="30" rows="7" class="form-control" placeholder="tagline" name="tagline">{{$user->user_profile->tagline}}</textarea>
 										</div>
 										<h2 class="colorlib-heading">Payment Method</h2>
 										<div class="form-group">
@@ -80,12 +82,12 @@ colorlib-active
 								</div>
 							
 							</div>		
-							</div>
+							<!-- </div> -->
 					</div>
 					<div class="row">
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 							<h2 class="colorlib-heading">Your Skill</h2>
-					</div>
+						</div>
 					<div class="col-md-7 col-md-push-1">
 						<div class="colorlib-narrow-content">
 							<div class="row">
@@ -121,6 +123,34 @@ colorlib-active
 										</div>
 										<div class="form-group">
 											<input type="submit" class="btn btn-primary btn-send-message" value="Update Your Skill">
+										</div>
+									</form>
+								</div>
+							
+							</div>		
+							</div>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
+							<h2 class="colorlib-heading">Change Password</h2>
+						</div>
+					<div class="col-md-7 col-md-push-1">
+						<div class="colorlib-narrow-content">
+							<div class="row">
+								<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
+									<form method="post" action="/changepass" enctype="multipart/form-data">
+									@csrf
+										<div class="form-group">
+										<span class="heading-meta">previous password</span>
+											<input type="password" class="form-control" name="prevpassword">
+										</div>
+										<div class="form-group">
+										<span class="heading-meta">new password</span>
+											<input type="password" class="form-control" name="password">
+										</div>
+										<div class="form-group">
+											<input type="submit" class="btn btn-primary btn-send-message" value="change password">
 										</div>
 									</form>
 								</div>

@@ -75,7 +75,7 @@ class LoginController extends Controller
         $this->guard()->logout();
 
         // And redirect to custom location
-        return redirect($this->redirectAfterLogout);
+        return redirect('home');
     }
 
     /**

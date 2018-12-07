@@ -48,16 +48,19 @@
 	<div id="colorlib-page">
 		<a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
 		<aside id="colorlib-aside" role="complementary" class="border js-fullheight">
-			<h1 id="colorlib-logo"><a href="index.html">JobTasker</a></h1>
+			<h1 id="colorlib-logo"><a href="/dashboard">JobTasker</a></h1>
 			<nav id="colorlib-main-menu" role="navigation">
 				<ul>				
 					<li class="@yield('colorlib_home')"><a href="/dashboard">Home</a></li>
-					<li class="@yield('colorlib_posttask')"><a href="/posttask">Post Task</a></li>
-					<li class="@yield('colorlib_browsetask')"><a href="/browsetask">Browse Task</a></li>
-					<li class="@yield('colorlib_mytask')"><a href="/mytask">My Task</a></li>
-					<li class="@yield('colorlib_offertask')"><a href="/postoffer">offer</a></li>
-					<li class="@yield('colorlib_message')"><a href="/message">message</a></li>
-					<li class="@yield('colorlib_helptask')"><a href="/email">help</a></li>
+					<li class="@yield('colorlib_posttask')"><a href="/posttask">Post Pekerjaan Baru(poster)</a></li>
+					<li class="@yield('colorlib_browsetask')"><a href="/browsetask">Daftar List Pekerjaan (worker)</a></li>
+					<li class="@yield('colorlib_mytask')"><a href="/mytask">Pekerjaan Saya</a></li>
+					<li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran yang dikirim (worker)</a></li>
+					<li class="@yield('colorlib_message')"><a href="/message">Pesan</a></li>
+					<li class="@yield('colorlib_helptask')"><a href="/email">Bantuan dan Pelaporan</a></li>
+					@if(Auth::user()->user_type_id == 1)
+					<li><a href="/admin/dashboard">admin page</a></li>
+					@endif
 					<li ><a href="/logout">logout</a></li>
 				</ul>
 			</nav>
@@ -76,23 +79,24 @@
         @yield('content')
         </div>
 <!-- jQuery -->
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="/afterlogin/js/jquery.min.js"></script>
+	
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/jquery.min.js"></script>
 	<!-- jQuery Easing -->
-	<script src="/afterlogin/js/jquery.easing.1.3.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/jquery.easing.1.3.js"></script>
+
+	<!-- Waypoints -->
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/jquery.flexslider-min.js"></script>
+	<!-- Sticky Kit -->
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/sticky-kit.min.js"></script>
+	<!-- Owl carousel -->
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/owl.carousel.min.js"></script>
+	<!-- Counters -->
+	<script language="JavaScript" type="text/javascript" src="/afterlogin/js/jquery.countTo.js"></script>
 	<!-- Bootstrap -->
 	<script src="/afterlogin/js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
-	<script src="/afterlogin/js/jquery.waypoints.min.js"></script>
-	<!-- Flexslider -->
-	<script src="/afterlogin/js/jquery.flexslider-min.js"></script>
-	<!-- Sticky Kit -->
-	<script src="/afterlogin/js/sticky-kit.min.js"></script>
-	<!-- Owl carousel -->
-	<script src="/afterlogin/js/owl.carousel.min.js"></script>
-	<!-- Counters -->
-	<script src="/afterlogin/js/jquery.countTo.js"></script>
-	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	
 	<!-- MAIN JS -->
 	<script src="/afterlogin/js/main.js"></script>

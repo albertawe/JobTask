@@ -20,7 +20,7 @@ class CreateJobPostTable extends Migration
             $table->string('title');
             $table->string('job_type');
             $table->string('job_category');
-            $table->string('status')->default('not assigned');
+            $table->string('status')->default('not paid');
             $table->string('assigned_tasker_id')->nullable();
             $table->string('due_date');
             $table->integer('price');

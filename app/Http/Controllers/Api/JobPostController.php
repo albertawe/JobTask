@@ -11,7 +11,7 @@ use App\PaymentDetail;
 class JobPostController extends Controller
 {
     public function getAllJobPost(){
-        $jobs = JobPost::where('status','not assigned')->paginate(6);
+        $jobs = JobPost::where(['status' =>'not paid'])->paginate(6);
         //$job_post = JobPost::get();
         return $jobs;
     }

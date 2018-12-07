@@ -15,4 +15,6 @@ Route::group([
     CRUD::resource('jobpaymentdetail', 'jobpaymentdetailcontroller');
     CRUD::resource('jobpost', 'jobpostcontroller');
     CRUD::resource('blog', 'blogcontroller');
+    CRUD::resource('users', 'ListUsersController');
+    CRUD::resource('userprofile', 'userprofilecontroller');
 }); // this should be the absolute last line of this file

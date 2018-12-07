@@ -16,14 +16,20 @@ class CheckIfAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (backpack_auth()->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response(trans('backpack::base.unauthorized'), 401);
-            } else {
-                return redirect()->guest(backpack_url('login'));
-            }
+        if(auth()->user()->isAdmin()) {
+            return $next($request);
         }
+        else {
+            return response(trans('backpack::base.unauthorized'), 401);
+        }
+        // if (backpack_auth()->guest()) {
+        //     if ($request->ajax() || $request->wantsJson()) {
+        //         return response(trans('backpack::base.unauthorized'), 401);
+        //     } else {
+        //         return redirect()->guest(backpack_url('login'));
+        //     }
+        // }
 
-        return $next($request);
+        // return $next($request);
     }
 }
