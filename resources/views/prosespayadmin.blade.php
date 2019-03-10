@@ -251,7 +251,7 @@
             <div class="content">
 
                 <!-- START CENTERED WHITE CONTAINER -->
-                <span class="preheader">Pembayaran telah diterima.</span>
+                <span class="preheader">Request pengecekan pembayaran.</span>
                 <table class="main">
 
                     <!-- START MAIN CONTENT AREA -->
@@ -260,9 +260,6 @@
                             <table border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <p>Hi {{ $first_name }}  {{ $last_name }}</p>
-                                        <p>Terimakasih telah mengirimkan email :)</p>
-
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tbody>
                                             <tr>
@@ -271,11 +268,10 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>Pembayaran anda telah diterima dengan invoice</p></center>
+                                                                    <center><p>Pembayaran yang akan diperiksa memiliki invoice</p></center>
                                                                     <hr>
                                                                     <center><p>{{ $invoice }}</p></center>
                                                                     <hr>
-                                                                    <center><p>Silahkan memilih tawaran yang anda terima</p></center>
                                                                 </div>
                                                             </td>
                                                         </tr>

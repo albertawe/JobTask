@@ -1,6 +1,13 @@
 <!DOCTYPE HTML>
+<?php
+use DebugBar\StandardDebugBar;
+
+$debugbar = new StandardDebugBar();
+$debugbarRenderer = $debugbar->getJavascriptRenderer();
+?>
 <html>
 	<head>
+	<?php echo $debugbarRenderer->renderHead() ?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>JobTasker</title>
@@ -51,11 +58,11 @@
 			<h1 id="colorlib-logo"><a href="/dashboard">JobTasker</a></h1>
 			<nav id="colorlib-main-menu" role="navigation">
 				<ul>				
-					<li class="@yield('colorlib_home')"><a href="/dashboard">Home</a></li>
-					<li class="@yield('colorlib_posttask')"><a href="/posttask">Post Pekerjaan Baru(poster)</a></li>
-					<li class="@yield('colorlib_browsetask')"><a href="/browsetask">Daftar List Pekerjaan (worker)</a></li>
+					<li class="@yield('colorlib_home')"><a href="/dashboard">Profil</a></li>
+					<li class="@yield('colorlib_posttask')"><a href="/posttask">Unggah Pekerjaan Baru(poster)</a></li>
+					<li class="@yield('colorlib_browsetask')"><a href="/browsetask">Lowongan Tersedia (worker)</a></li>
 					<li class="@yield('colorlib_mytask')"><a href="/mytask">Pekerjaan Saya</a></li>
-					<li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran yang dikirim (worker)</a></li>
+					<!-- <li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran yang dikirim (worker)</a></li> -->
 					<li class="@yield('colorlib_message')"><a href="/message">Pesan</a></li>
 					<li class="@yield('colorlib_helptask')"><a href="/email">Bantuan dan Pelaporan</a></li>
 					@if(Auth::user()->user_type_id == 1)
@@ -101,5 +108,6 @@
 	<!-- MAIN JS -->
 	<script src="/afterlogin/js/main.js"></script>
 	@yield('javascript')
+	<?php echo $debugbarRenderer->render() ?>
 	</body>
 </html>    

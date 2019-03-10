@@ -26,11 +26,11 @@
 										<p>Job Description: {{$taskdetails->job_description}}</p>
 								@if($taskdetails->images)
 								@foreach(json_decode($taskdetails->images, true) as $image)
-								<div class="itm" style="width: 300px; 
-    							height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
-								 ">
-								<img src="{{ URL::to('/images/'.$image)}}" >
-								 </div>
+									<div class="itm" style="width: 300px; 
+									height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
+									">
+									<img src="{{ URL::to('/images/'.$image)}}" >
+									</div>
 								@endforeach
 								@endif
 								<br>
@@ -45,72 +45,79 @@
 											</div>
 									</div>
 									<div class="form-group">
-											<input type="submit" class="btn btn-primary btn-send-message" value="Edit your task">
+											<input type="submit" class="btn btn-primary btn-send-message" value="Upload image">
 									</div>
 							</form>
 							@endif
 								</span>
 							@if($taskdetails->posted_by_id == $uid && $paymentdetails->paid_status == 'not paid')
-							<h1> anda dapat memilih tawaran setelah anda melakukan pembayaran </h1>
-							<form method="POST" action="/payment/{{$taskdetails->payment_id}}">
-									@csrf
-									<div class="form-group">
-											<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
-										</div>
-							</form>
+								<h5> Invoice anda adalah {{$paymentdetails->invoice}}, silahkan melakukan transfer ke no-rekening 123123 sesuai dengan offer yang akan anda pilih. <br>
+								 anda dapat memilih tawaran setelah anda melakukan pembayaran </h5>
+								<form method="POST" action="/payment/{{$taskdetails->payment_id}}">
+										@csrf
+										<div class="form-group">
+												<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
+											</div>
+								</form>
 							@elseif($taskdetails->posted_by_id == $uid && $paymentdetails->paid_status == 'paid pending')
-							<h1> pembayaran anda dalam proses konfirmasi oleh admin </h1>
+								<h4> pembayaran anda dalam proses konfirmasi oleh admin </h4>
+								<form method="POST" action="/payment/{{$taskdetails->payment_id}}">
+										@csrf
+										<div class="form-group">
+												<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment again">
+											</div>
+								</form>
 							@endif
 							@if($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not assigned')
-							@foreach($offers as $offer)
-							</br>
-							<span class="heading-meta">
-							<p>Nego Description: {{$offer->description}}</p>
-							<p>Nego Price: {{$offer->nego}}</p></br>
-							</span>
-							<input type="button" onclick="location.href='createmessage/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="send this tasker a message">
-							<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="see this tasker's profile">
-							<input type="button" onclick="location.href='accept_offer/{{$offer->id}}';" class="btn btn-info col-md-10" value="choose this offer">
-							@endforeach
+								@foreach($offers as $offer)
+									</br>
+									<span class="heading-meta">
+									<p>Nego Description: {{$offer->description}}</p>
+									<p>Nego Price: {{$offer->nego}}</p></br>
+									</span>
+									<input type="button" onclick="location.href='createmessage/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="send this tasker a message">
+									<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="see this tasker's profile">
+									<input type="button" onclick="location.href='accept_offer/{{$offer->id}}';" class="btn btn-info col-md-10" value="choose this offer">
+								@endforeach
 							@elseif($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not paid')
-							@foreach($offers as $offer)
-							</br>
-							<span class="heading-meta">
-							<p>Nego Description: {{$offer->description}}</p>
-							<p>Nego Price: {{$offer->nego}}</p></br>
-							</span>
-							<input type="button" onclick="location.href='createmessage/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="send this tasker a message">
-							<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="see this tasker's profile">
-							@endforeach
+								@foreach($offers as $offer)
+									</br>
+									<span class="heading-meta">
+									<p>Nego Description: {{$offer->description}}</p>
+									<p>Nego Price: {{$offer->nego}}</p></br>
+									</span>
+									<input type="button" onclick="location.href='createmessage/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="send this tasker a message">
+									<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="see this tasker's profile">
+								@endforeach
 							@elseif($taskdetails->posted_by_id == $uid && $taskdetails->status == 'assigned')
-							<a href="finish_offer/{{$taskdetails->id}}"><p>Click this when the task is finished</p></a>
+								<a href="finish_offer/{{$taskdetails->id}}"><p>Click this when the task is finished</p></a>
 							@elseif($taskdetails->status == 'finished')
-							<p>this task is finished, waiting for poster's payment</p>
+								<p>this task is finished, waiting for poster's payment</p>
 							@elseif($taskdetails->status == 'completed')
-							<p>this task is finished, poster is paid</p>
+								<p>this task is finished, poster is paid</p>
 							@elseif($taskdetails->posted_by_id !== $uid)
 							@if($taskdetails->status == 'not assigned' || $taskdetails->status == 'not paid')
-							<div class="row" style=>
-							<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
-									<form method="post" action="{{url('postoffer')}}" enctype="multipart/form-data">
-									@csrf
-										<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
-										<div class="form-group">
-										<span class="heading-meta">Send few words to describe why you are the perfect person</span>
-											<input type="text" value="" class="form-control" placeholder="i am a computer science program student..." name="description">
-										</div>
-										<div class="form-group">
-										<span class="heading-meta">offer new price!! you can let it be if you are satisfied with the price</span>
-											<input type="number" value="{{$taskdetails->price}}" class="form-control" placeholder="offer your price" name="price">
-										</div>
-										<div class="form-group">
-										<input type="hidden" value="{{$taskdetails->id}}" class="form-control" name="job_id">
-										<input type="hidden" value="{{$taskdetails->title}}" class="form-control" name="job_title">
-										<input type="submit" class="btn btn-primary btn-send-message" value="send your offer">
-										</div>
-									</form>
+								<div class="row" style=>
+								<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
+										<form method="post" action="{{url('postoffer')}}" enctype="multipart/form-data">
+										@csrf
+											<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
+											<div class="form-group">
+											<span class="heading-meta">Send few words to describe why you are the perfect person</span>
+												<input type="text" value="" class="form-control" placeholder="i am a computer science program student..." name="description">
+											</div>
+											<div class="form-group">
+											<span class="heading-meta">offer new price!! you can let it be if you are satisfied with the price</span>
+												<input type="number" value="{{$taskdetails->price}}" class="form-control" placeholder="offer your price" name="price">
+											</div>
+											<div class="form-group">
+											<input type="hidden" value="{{$taskdetails->id}}" class="form-control" name="job_id">
+											<input type="hidden" value="{{$taskdetails->title}}" class="form-control" name="job_title">
+											<input type="submit" class="btn btn-primary btn-send-message" value="send your offer">
+											</div>
+										</form>
+									</div>
 								</div>
-							</div>
 							@endif	
 							@endif
 							</div>

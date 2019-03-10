@@ -14,12 +14,6 @@ class Email extends Controller
     public function sendEmail(Request $request)
 {
     try{
-        // Mail::send('email', ['nama' => $request->nama, 'pesan' => $request->pesan], function ($message) use ($request)
-        // {
-        //     $message->subject($request->judul);
-        //     $message->from('s00000017107@student.uph.edu', $request->nama);
-        //     $message->to('jobtaskerindonesia@gmail.com');
-        // });
         Mail::send('email', ['nama' => $request->nama, 'pesan' => $request->pesan], function ($message) use ($request)
         {
             $message->subject($request->judul);
@@ -35,22 +29,33 @@ class Email extends Controller
 public function sendInvoice($id)
 {
     $paymentdetail = PaymentDetail::where('payment_id',$id)->first();
-    // $jobpost = JobPost::where('payment_id',$id)->first();
-    // $jobpost->status = 'not assigned';
+    $job = JobPost::where('payment_id',$id)->first();
+    $jobname = $job->title;
     $paymentdetail->paid_status = 'paid pending';
+    $invid = $paymentdetail->invoice;
     $uid = Auth::user()->id;
     $user = User::where('id', $uid)->with(['user_skill', 'user_profile'])->first();
     $firstname = $user->user_profile->first_name;
     $lastname = $user->user_profile->last_name;
     $email = $user->email;
-    // $jobpost->save();
     $paymentdetail->save();
     try{
-        Mail::send('invoice', ['first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $id], function ($message) use ($email)
+        Mail::send('prosespay', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invid], function ($message) use ($email)
         {
-            $message->subject('pembayaran anda telah diterima!');
+            $message->subject('pembayaran anda sedang diproses oleh admin!');
             $message->from('jobtaskerindonesia@gmail.com');
             $message->to($email);
+        });
+    }
+    catch (Exception $e){
+        return response (['status' => false,'errors' => $e->getMessage()]);
+    }
+    try{
+        Mail::send('prosespayadmin', ['invoice' => $invid], function ($message) use ($email)
+        {
+            $message->subject('request pengecekan pembayaran!');
+            $message->from('jobtaskerindonesia@gmail.com');
+            $message->to('jobtaskerindonesia@gmail.com');
         });
         return redirect()->back();
     }

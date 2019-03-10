@@ -20,15 +20,11 @@ class UserProfileController extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-//        $user_profile = UserProfile::find($id);
-//        $user_skill = UserSkill::find($id);
         $user = User::where('id', $id)->with(['user_skill', 'user_profile'])->first();
         $blogs = blog::all();
         Carbon::parse($user->user_profile->birthdate)->format('y/m/d');
-        //dd($user_profile);
         $salah = '';
         return view('afterlogin.home',compact('user','blogs','id','salah'));
-        //return $user_profile;
     }
 
     public function resetpass(Request $request){
@@ -69,14 +65,12 @@ class UserProfileController extends Controller
         $user_profile->bank = $request->get('bank');
         $user_profile->no_rek = $request->get('no_rek');
         $user_profile->phone = $request->get('phone');
-        //$user_profile->birthdate = $request->get('birthdate');
         $user_profile->birthdate = $request->date;
         if($request->image != null){
-        $name=$request->image->getClientOriginalName();
-        $request->image->move(public_path().'/images/profile', $name);  
-        $user_profile->image = $name;
+            $name=$request->image->getClientOriginalName();
+            $request->image->move(public_path().'/images/profile', $name);  
+            $user_profile->image = $name;
         }  
-        //dd($request->date);
         $user_profile->tagline = $request->get('tagline');
         $user_profile->location = $request->get('location');
         $user_profile->save();

@@ -68,6 +68,7 @@ class jobpostcontroller extends  CrudController
         'label' => 'status of job',
         'type'  => 'radio',
         'options'     => [ // the key will be stored in the db, the value will be shown as label; 
+            "not paid" => "not paid",
             "not assigned" => "not assigned",
             "assigned" => "assigned",
             "finished" => "finished",

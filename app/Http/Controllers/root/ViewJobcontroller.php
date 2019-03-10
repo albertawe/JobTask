@@ -50,12 +50,18 @@ class ViewJobcontroller extends Controller
     public function show($id)
     {
         $taskdetails = JobPost::find($id);
+        $price = $taskdetails->price;
         $user_id = Auth::user()->id;
         $paymentdetails = PaymentDetail::where('payment_id',$taskdetails->payment_id)->first();
         $offers = offer::where('job_id',$taskdetails->id)->get();
-//        dd($taskdetails);
         $uid = strval($user_id);
+        if($paymentdetails->paid_status == 'paid'){
+            $offers = $offers->where('nego','<=',$price);
         return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid'));
+        }
+        else{
+        return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid'));
+        }
     }
 
     /**

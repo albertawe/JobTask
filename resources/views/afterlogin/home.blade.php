@@ -118,8 +118,7 @@ colorlib-active
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">more about what you capable of</span>
-											<textarea name="tagline" id="message" cols="30" rows="7" class="form-control" placeholder="tell us more">
-											{{$user->user_skill->tagline}}</textarea>
+											<textarea name="tagline" id="message" cols="30" rows="7" class="form-control" placeholder="tell us more">{{$user->user_skill->tagline}}</textarea>
 										</div>
 										<div class="form-group">
 											<input type="submit" class="btn btn-primary btn-send-message" value="Update Your Skill">

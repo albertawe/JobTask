@@ -19,7 +19,6 @@ class changepasscontroller extends Controller
             return redirect('dashboard');
         }
         else {
-            //$salah = 'password sebelumnya tidak sesuai';
             return Redirect::back()->withErrors(['password sebelumnya tidak sesuai', 'password sebelumnya tidak sesuai']);
         }
     }

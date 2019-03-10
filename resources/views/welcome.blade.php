@@ -74,7 +74,7 @@
 						<div class="home-content">
 							<h1 class="white-text">Membantu anda dalam menyelesaikan pekerjaan harian anda</h1>
 							<p class="white-text">Menyediakan platform outsourcing atas pekerjaan harian</p>
-							<button class="white-btn"><a href="/register">ayo mulai!</a></button>
+							<button class="white-btn"><a href="/browsetask">ayo mulai!</a></button>
 						</div>
 					</div>
 
@@ -95,7 +95,7 @@
 						<span>Category</span>
 						<h3>Business & Admin</h3>
 						<div class="work-link">
-							<a href="/login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 						</div>
 					</div>
 				</div>
@@ -106,7 +106,7 @@
 						<span>Category</span>
 						<h3>Cleaning</h3>
 						<div class="work-link">
-							<a href="login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 						</div>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 						<span>Category</span>
 						<h3>Delivery & removals</h3>
 						<div class="work-link">
-							<a href="login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 					</div>
 					</div>
 				</div>
@@ -128,7 +128,7 @@
 						<span>Category</span>
 						<h3>Furniture assembly</h3>
 						<div class="work-link">
-							<a href="login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 						</div>
 					</div>
 				</div>
@@ -139,7 +139,7 @@
 						<span>Category</span>
 						<h3>Handyman</h3>
 						<div class="work-link">
-							<a href="login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 					</div>
 					</div>
 				</div>
@@ -150,7 +150,7 @@
 						<span>Category</span>
 						<h3>Anything</h3>
 						<div class="work-link">
-							<a href="login"><i class="fa fa-external-link"></i></a>
+							<a href="/browsetask"><i class="fa fa-external-link"></i></a>
 						</div>
 					</div>
 				</div>
@@ -333,11 +333,11 @@
 				<div class="team-content">
 					<h3>John Doe</h3>
 					<span>speciality: delivery, cleaning</span><br>
+					<!-- <p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
+					<p class="material-icons" style="font-size:24px">star</p> -->
 				</div>
 			</div>
 		</div>
@@ -356,11 +356,11 @@
 				<div class="team-content">
 					<h3>James Roe</h3>
 					<span>speciality: assembly, handyman</span><br>
+					<!-- <p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
+					<p class="material-icons" style="font-size:24px">star</p> -->
 				</div>
 			</div>
 		</div>
@@ -379,11 +379,11 @@
 				<div class="team-content">
 					<h3>Joe Poe</h3>
 					<span>speciality: design, marketing</span><br>
+					<!-- <p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
 					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
-					<p class="material-icons" style="font-size:24px">star</p>
+					<p class="material-icons" style="font-size:24px">star</p> -->
 				</div>
 			</div>
 		</div>

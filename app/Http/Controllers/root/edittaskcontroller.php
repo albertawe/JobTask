@@ -65,7 +65,7 @@ class edittaskcontroller extends Controller
         $job_post->job_description = $request->jobdescription;
         $job_post->images = json_encode($request->image);
         $job_post->save();
-        return redirect('mytask');
+        return redirect()->back();
     }
 
 }

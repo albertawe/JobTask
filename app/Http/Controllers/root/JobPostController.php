@@ -41,15 +41,14 @@ class JobPostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'filename' => 'required',
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         $id = Auth::user()->id;
         $job_post = new JobPost;
+        $payment = new PaymentDetail;
         $payment_id = sprintf('P-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
-        $invoice = sprintf('INV-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
+        $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $job_post->payment_id = $payment_id;
-        $job_post->invoice = $invoice;
         $job_post->title = $request->title;
         $job_post->posted_by_id = $id;
         $job_post->job_type = $request->type;
@@ -58,8 +57,8 @@ class JobPostController extends Controller
         $job_post->price = $request->price;
         $job_post->address = $request->address;
         $job_post->job_description = $request->jobdescription;
-        $payment = new PaymentDetail;
-        $payment['payment_id'] = $payment_id;
+        $payment->payment_id = $payment_id;
+        $payment->invoice = $invoice;
         if($request->hasfile('filename'))
         {
 
@@ -68,12 +67,13 @@ class JobPostController extends Controller
                $name=$image->getClientOriginalName();
                $image->move(public_path().'/images/', $name);  
                $data[] = $name;  
+               $job_post->images=json_encode($data);
            }
         }
-        $job_post->images=json_encode($data);
+        
         $payment->save();
         $job_post->save();
-        return redirect('posttask');
+        return redirect('mytask');
     }
 
     /**
@@ -111,7 +111,6 @@ class JobPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->image);
         $this->validate($request, [
             'filename' => 'required',
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
