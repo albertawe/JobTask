@@ -41,6 +41,13 @@ class JobPostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'title' => 'required|min:5',
+            'type' => 'required',
+            'category' => 'required',
+            'duedate' => 'required|date|after:today',
+            'price' => 'required',
+            'address' => 'required|min:10',
+            'jobdescription' => 'required|min:20',
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         $id = Auth::user()->id;
@@ -50,6 +57,7 @@ class JobPostController extends Controller
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $job_post->payment_id = $payment_id;
         $job_post->title = $request->title;
+        $job_post->status = 'not paid';
         $job_post->posted_by_id = $id;
         $job_post->job_type = $request->type;
         $job_post->job_category = $request->category;
@@ -59,6 +67,7 @@ class JobPostController extends Controller
         $job_post->job_description = $request->jobdescription;
         $payment->payment_id = $payment_id;
         $payment->invoice = $invoice;
+        $payment->paid_status = 'not paid';
         if($request->hasfile('filename'))
         {
 
@@ -112,6 +121,13 @@ class JobPostController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'title' => 'required|min:5',
+            'type' => 'required',
+            'category' => 'required',
+            'duedate' => 'required|date|after:today',
+            'price' => 'required',
+            'address' => 'required|min:10',
+            'jobdescription' => 'required|min:20',
             'filename' => 'required',
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);

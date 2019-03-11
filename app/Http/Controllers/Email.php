@@ -13,6 +13,12 @@ class Email extends Controller
 {
     public function sendEmail(Request $request)
 {
+    $this->validate($request, [
+        'email' => 'required|min:5',
+        'nama' => 'required',
+        'judul' => 'required',
+        'pesan' => 'required|min:10',
+    ]);
     try{
         Mail::send('email', ['nama' => $request->nama, 'pesan' => $request->pesan], function ($message) use ($request)
         {

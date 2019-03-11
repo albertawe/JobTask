@@ -11,6 +11,16 @@ colorlib-active
 							<h2 class="colorlib-heading">Task Related to you</h2>
 						</div>
 				</div>
+				@if(\Session::has('alert-failed'))
+					<div class="alert alert-failed">
+						<div>{{Session::get('alert-failed')}}</div>
+					</div>
+				@endif
+				@if(\Session::has('alert-success'))
+					<div class="alert alert-success">
+						<div>{{Session::get('alert-success')}}</div>
+					</div>
+				@endif
 				<div class="row">
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 							<span class="heading-meta">Posted Job</span>

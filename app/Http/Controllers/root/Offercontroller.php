@@ -40,6 +40,10 @@ class Offercontroller extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'price' => 'required',
+            'description' => 'required|min:10',
+        ]);
         $uid = Auth::user()->id;
         $offer = new offer;
         $offer->job_title = $request->get('job_title');
@@ -47,10 +51,8 @@ class Offercontroller extends Controller
         $offer->nego = $request->get('price');
         $offer->description = $request->get('description');
         $offer->user_offer_id = $uid;
-        $idpage = $offer->job_id;
-        $page = (int) $idpage;
         $offer->save();
-        return \Redirect::back()->with('viewtask',$page);
+        return \Redirect::back()->with('viewtask')->with('alert-success','Berhasil Kirim Tawaran');
     }
 
     /**

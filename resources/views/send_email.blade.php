@@ -25,18 +25,38 @@ colorlib-active
             <form action="{{ url('/sendEmail') }}" method="post" entype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="form-group">
+                @if ($errors->has('email'))
+
+				    <span class="text-danger">{{ $errors->first('email') }}</span>
+
+				@endif
                     <span class="heading-meta" for="email">Email:</span>
                     <input type="email" class="form-control" id="email" name="email">
                 </div>
                 <div class="form-group">
+                @if ($errors->has('nama'))
+
+				    <span class="text-danger">{{ $errors->first('nama') }}</span>
+
+				@endif
                     <span class="heading-meta" for="nama">Nama:</span>
                     <input type="text" class="form-control" id="name" name="nama"/>
                 </div>
                 <div class="form-group">
+                @if ($errors->has('judul'))
+
+				    <span class="text-danger">{{ $errors->first('judul') }}</span>
+
+				@endif
                     <span class="heading-meta" for="judul">Judul:</span>
                     <input type="text" class="form-control" id="judul" name="judul"/>
                 </div>
                 <div class="form-group">
+                @if ($errors->has('pesan'))
+
+				    <span class="text-danger">{{ $errors->first('pesan') }}</span>
+
+				@endif
                     <span class="heading-meta" for="pesan">Pesan:</span>
                     <textarea class="form-control" id="pesan" name="pesan"></textarea>
                 </div>

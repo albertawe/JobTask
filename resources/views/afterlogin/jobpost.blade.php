@@ -25,6 +25,11 @@ colorlib-active
 											<option value="{{$category->category}}">{{$category->category}}</option>  
 											@endforeach
 											</select>
+											@if ($errors->has('category'))
+
+												<span class="text-danger">{{ $errors->first('category') }}</span>
+
+											@endif
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Can it be done remotely?</span>
@@ -32,25 +37,55 @@ colorlib-active
 											<option value="remote">remote</option>
 											<option value="directly">directly</option>    
 										</select>
+										@if ($errors->has('type'))
+
+											<span class="text-danger">{{ $errors->first('type') }}</span>
+
+										@endif
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Title of your task</span>
+										@if ($errors->has('title'))
+
+											<span class="text-danger">{{ $errors->first('title') }}</span>
+
+										@endif
 											<input type="text" value="" class="form-control" placeholder="Bantuin pasang perabut meja IKEA saya" name="title">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Input the address your task will be held</span>
+											@if ($errors->has('address'))
+
+											<span class="text-danger">{{ $errors->first('address') }}</span>
+
+											@endif
 											<input type="text" value="" class="form-control" placeholder="task address detail" name="address">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Add your price (Idr)<br>(of course the more you add the happier the tasker)</span>
+										@if ($errors->has('price'))
+
+											<span class="text-danger">{{ $errors->first('price') }}</span>
+
+										@endif
 											<input type="number" value="" class="form-control" placeholder="offer your price" name="price">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Tell us the duedate of your task</span>
+										@if ($errors->has('duedate'))
+
+											<span class="text-danger">{{ $errors->first('duedate') }}</span>
+
+										@endif
 											<input type="date" class="form-control" placeholder="duedate" name="duedate">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Describe your task</span>
+										@if ($errors->has('jobdescription'))
+
+											<span class="text-danger">{{ $errors->first('jobdescription') }}</span>
+
+										@endif
 											<textarea name="jobdescription" value="" id="jobdescription" cols="30" rows="7" class="form-control" placeholder="describe your task specificly" name="jobdescription"></textarea>
 										</div>
 										<div class="input-group control-group increment">

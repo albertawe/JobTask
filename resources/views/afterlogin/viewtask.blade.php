@@ -11,6 +11,16 @@
 							@endif
 						</div>
 				</div>
+				@if(\Session::has('alert-failed'))
+					<div class="alert alert-failed">
+						<div>{{Session::get('alert-failed')}}</div>
+					</div>
+				@endif
+				@if(\Session::has('alert-success'))
+					<div class="alert alert-success">
+						<div>{{Session::get('alert-success')}}</div>
+					</div>
+				@endif
 					<div class="col-md-7 col-md-push-1">
 						<div class="colorlib-narrow-content">
 							<div class="row">
@@ -69,6 +79,9 @@
 								</form>
 							@endif
 							@if($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not assigned')
+								@if($offers->isEmpty())
+									<p>Currently no offer</p>
+								@endif
 								@foreach($offers as $offer)
 									</br>
 									<span class="heading-meta">
@@ -80,6 +93,9 @@
 									<input type="button" onclick="location.href='accept_offer/{{$offer->id}}';" class="btn btn-info col-md-10" value="choose this offer">
 								@endforeach
 							@elseif($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not paid')
+								@if($offers->isEmpty())
+									<p>Currently no offer</p>
+								@endif
 								@foreach($offers as $offer)
 									</br>
 									<span class="heading-meta">
@@ -104,10 +120,20 @@
 											<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
 											<div class="form-group">
 											<span class="heading-meta">Send few words to describe why you are the perfect person</span>
+											@if ($errors->has('description'))
+
+												<span class="text-danger">{{ $errors->first('description') }}</span>
+
+											@endif
 												<input type="text" value="" class="form-control" placeholder="i am a computer science program student..." name="description">
 											</div>
 											<div class="form-group">
 											<span class="heading-meta">offer new price!! you can let it be if you are satisfied with the price</span>
+											@if ($errors->has('price'))
+
+												<span class="text-danger">{{ $errors->first('price') }}</span>
+
+											@endif
 												<input type="number" value="{{$taskdetails->price}}" class="form-control" placeholder="offer your price" name="price">
 											</div>
 											<div class="form-group">
