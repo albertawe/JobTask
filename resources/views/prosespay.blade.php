@@ -251,7 +251,7 @@
             <div class="content">
 
                 <!-- START CENTERED WHITE CONTAINER -->
-                <span class="preheader">Pembayaran anda sedang kami konfirmasi.</span>
+                <span class="preheader">Berikut detail invoice request topup anda.</span>
                 <table class="main">
 
                     <!-- START MAIN CONTENT AREA -->
@@ -269,15 +269,11 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>Pembayaran anda yang berjudul</p></center>
-                                                                    <hr>
-                                                                    <center><p>{{$job_name}}</p></center>
-                                                                    <hr>
-                                                                    <center><p>Dengan invoice</p></center>
+                                                                    <center><p>Invoice anda untuk topup credit sebesar Rp.{{$nominal}} adalah</p></center>
                                                                     <hr>
                                                                     <center><p>{{ $invoice }}</p></center>
                                                                     <hr>
-                                                                    <center><p>Sedang kami konfirmasi dalam 1x24 jam</p></center>
+                                                                    <center><p>Silahkan transfer ke rekening kami di bank abc dengan no.rek 123123 dan mencantumkan nomor invoice anda dalam deskripsi</p></center>
                                                                 </div>
                                                             </td>
                                                         </tr>

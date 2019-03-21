@@ -16,8 +16,10 @@
                     <div class="col-md-10 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
                         <div class="blog-entry">
                            <div class="desc">
-                                <h3><a href="viewcons/{{$mes->message_id}}" class="col-md-8">messages between {{$mes->user1_first_name}} {{$mes->user1_last_name}}
-                                        and {{$mes->user2_first_name}} {{$mes->user2_last_name}}</a></h3>
+                                <h3><a href="viewcons/{{$mes->message_id}}" class="col-md-8">Pembahasan mengenai {{$mes->jobpost->title}}</a></h3>
+                                    <span><small>messages between {{$user1->user_profile->first_name}} {{$user1->user_profile->last_name}}
+                                        and {{$user2->user_profile->first_name}} {{$user2->user_profile->last_name}}</small></br>
+									</span>
                             </div>
                         </div>
                     </div>

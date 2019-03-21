@@ -19,6 +19,7 @@ class CreateJobOffer extends Migration
             $table->string('job_title');
             $table->string('user_offer_id');
             $table->string('description');
+            $table->string('status');
             $table->integer('nego')->nullable();
             $table->timestamps();
         });

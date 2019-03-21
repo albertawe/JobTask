@@ -3,7 +3,7 @@ import {Col} from 'react-bootstrap';
 
 export const JobListItem = ( jobs ) => {
     return(
-        <Col md={4} sm={6}>
+        <Col md={4} sm={6} key={jobs.jobs.id}>
         <div className="blog-entry">
             <div className="desc">
             <h3><a href={'/viewtask/' + jobs.jobs.id}>{jobs.jobs.title}</a></h3>

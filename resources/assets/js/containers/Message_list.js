@@ -6,12 +6,17 @@ import { fetchmessage, reset } from "../actions/index";
 import { MessageListItem } from './Message_list_item';
 
 class MessageList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
   componentDidMount(){
     if (document.getElementById('chatList')) {
       var data = document.getElementById('chatList').getAttribute('data');
     }
     this.props.reset();
     this.props.fetchmessage(data);
+    this.setState({isLoading: false});
   }
   renderMessageList() {
     return this.props.message.message.map(comment => { return comment.map(
@@ -26,16 +31,12 @@ class MessageList extends Component {
   }
 
   render() {
-
+    if(this.state.isLoading){
+      return (<h4>Loading..</h4>)
+    }
     return ( 
-      
       <div>
-        {/* <Row>
-        <Col md={6}> */}
         {this.renderMessageList()}
-        {/* </Col> */}
-        {/* </Row>
-        <br /> */}
       </div>
     );
   }

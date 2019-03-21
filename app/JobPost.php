@@ -13,4 +13,7 @@ class JobPost extends Model
     // public function jobdetail(){
     //     return $this->hasMany('PaymentDetail');
     // }
+    public function message(){
+        return $this->belongsTo('App\message');
+    }
 }

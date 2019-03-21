@@ -9,7 +9,9 @@ use Auth;
 use App\UserProfile;
 use App\UserSkill;
 use Carbon\Carbon;
+use App\JobPost;
 use App\blog;
+use App\credit;
 class UserProfileController extends Controller
 {
     /**
@@ -20,11 +22,19 @@ class UserProfileController extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-        $user = User::where('id', $id)->with(['user_skill', 'user_profile'])->first();
+        $user = User::where('id', $id)->with(['user_skill', 'user_profile' ,'credit','creditlogs'])->first();
+        $log = $user->creditlogs;
         $blogs = blog::all();
         Carbon::parse($user->user_profile->birthdate)->format('y/m/d');
         $salah = '';
         return view('afterlogin.home',compact('user','blogs','id','salah'));
+    }
+
+    public function creditlog(){
+        $id = Auth::user()->id;
+        $user = User::where('id', $id)->with(['creditlogs'])->first();
+        $logs = $user->creditlogs;
+        return view('afterlogin.log',compact('logs'));
     }
 
     public function resetpass(Request $request){
@@ -68,6 +78,9 @@ class UserProfileController extends Controller
         $user_profile->birthdate = $request->date;
         if($request->image != null){
             $name=$request->image->getClientOriginalName();
+            if(\File::exists(public_path().'/images/profile/'.$name)){
+                $name = str_random(5).$id.".jpg";
+            }
             $request->image->move(public_path().'/images/profile', $name);  
             $user_profile->image = $name;
         }  

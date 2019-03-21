@@ -71,6 +71,15 @@
 												<span class="heading-meta">tagline</span>
 												<h2 class="colorlib-heading">{{$user->user_skill->tagline}}</h2>
 											</div>
+											@if($user->user_skill->images)
+												@foreach(json_decode($user->user_skill->images, true) as $image)
+													<div class="itm" style="width: 300px; 
+													height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
+													">
+													<img src="{{ URL::to('/images/quali'.$image)}}" >
+													</div>
+												@endforeach
+											@endif
 									</div>
 							</div>
 					</div>

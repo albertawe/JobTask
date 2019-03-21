@@ -68,7 +68,7 @@ colorlib-active
 											<span class="text-danger">{{ $errors->first('price') }}</span>
 
 										@endif
-											<input type="number" value="" class="form-control" placeholder="offer your price" name="price">
+											<input type="number" value="" id="number" min="0" oninput="validity.valid||(value=value.replace(/\D+/g, ''))" class="form-control" placeholder="offer your price" name="price">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Tell us the duedate of your task</span>
@@ -77,7 +77,7 @@ colorlib-active
 											<span class="text-danger">{{ $errors->first('duedate') }}</span>
 
 										@endif
-											<input type="date" class="form-control" placeholder="duedate" name="duedate">
+											<input type="date" class="form-control" id="datepicker" placeholder="duedate" name="duedate">
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">Describe your task</span>
@@ -114,4 +114,27 @@ colorlib-active
 					</div>
 			</div>
 		</div>
+		<script type="text/javascript">  
+        $('#datepicker').datepicker({ 
+            autoclose: true,   
+            format: 'yyyy-mm-dd'  
+         });  
+		 </script>
+@endsection
+
+
+@section('javascript')
+	<script type="text/javascript">
+	// Select your input element.
+	var number = document.getElementById('number');
+
+	// Listen for input event on numInput.
+	number.onkeydown = function(e) {
+		if(!((e.keyCode > 95 && e.keyCode < 106)
+		|| (e.keyCode > 47 && e.keyCode < 58) 
+		|| e.keyCode == 8)) {
+			return false;
+		}
+	}
+	</script>
 @endsection

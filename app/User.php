@@ -40,6 +40,14 @@ class User extends Authenticatable
         return $this->hasOne('App\UserSkill');
     }
 
+    public function credit(){
+        return $this->hasOne('App\credit');
+    }
+
+    public function creditlogs(){
+        return $this->hasMany('App\creditlog');
+    }
+
     public function user_profile(){
         return $this->hasOne("App\UserProfile");
     }

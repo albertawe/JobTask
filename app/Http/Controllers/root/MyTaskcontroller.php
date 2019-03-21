@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\JobPost;
 use Auth;
+use Carbon\Carbon;
+
 class MyTaskcontroller extends Controller
 {
     /**
@@ -16,9 +18,10 @@ class MyTaskcontroller extends Controller
     public function index()
     {
         $id = Auth::user()->id;
+        $today = Carbon::now()->format('Y-m-d');
         $postedjobs = JobPost::where('posted_by_id',$id)->get();
         $acceptjobs = JobPost::where('assigned_tasker_id',$id)->get();
-        return view('afterlogin.mytask',compact('postedjobs','acceptjobs'));
+        return view('afterlogin.mytask',compact('postedjobs','acceptjobs','today'));
     }
 
     /**

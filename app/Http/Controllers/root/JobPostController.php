@@ -57,7 +57,7 @@ class JobPostController extends Controller
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $job_post->payment_id = $payment_id;
         $job_post->title = $request->title;
-        $job_post->status = 'not paid';
+        $job_post->status = 'not assigned';
         $job_post->posted_by_id = $id;
         $job_post->job_type = $request->type;
         $job_post->job_category = $request->category;

@@ -1,30 +1,35 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Row,
-  ButtonToolbar,
-  Button,
-  Pagination,
-  PaginationItem,
-  PaginationItemProps
-} from "react-bootstrap";
+import { Row, ButtonToolbar, Button, Pagination } from "react-bootstrap";
 import { bindActionCreators } from "redux";
 import {
   fetchjobpost,
   reset,
   fetchjobcategory,
-  fetchjobbypage
+  fetchjobbypage,
+  startload,
+  stopload
 } from "../actions/index";
 import { JobListItem } from "./Job_list_item";
+import { CSSTransitionGroup } from "react-transition-group";
+import { Loading } from "../components/Loading";
 
 class JobList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
+
   componentDidMount() {
     this.props.fetchjobpost("");
     this.props.fetchjobcategory();
+    this.setState({ isLoading: false });
   }
   handleClick(category) {
+    this.props.startload();
     this.props.reset();
     this.props.fetchjobpost(category);
+    this.props.stopload();
   }
   handlePageClick(page) {
     this.props.reset();
@@ -115,12 +120,10 @@ class JobList extends Component {
   }
   renderPagination() {
     var a = this.props.job.job;
-    console.log(a);
     return a.map(page => {
       if (page.prev_page_url == null && page.next_page_url == null) {
         return this.handlebothnull(page);
-      }
-      else if (page.next_page_url == null) {
+      } else if (page.next_page_url == null) {
         return this.handlenextnull(page);
       } else if (page.prev_page_url == null) {
         return this.handleprevnull(page);
@@ -139,22 +142,37 @@ class JobList extends Component {
   }
 
   render() {
+    if (this.props.load.load.isFetching == true) {
+      return <Loading type="spin" color="blue"/>
+    }
     return (
-      <div>
-        <Row>
-          <ButtonToolbar>
-            <Button
-              key={99}
-              bsStyle="warning"
-              onClick={() => this.handleClick("")}
-            >
-              all
-            </Button>
-            {this.renderCategory()}
-          </ButtonToolbar>
-        </Row>
+      <div className="container">
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}
+        >
+          <Row>
+            <ButtonToolbar>
+              <Button
+                key={99}
+                bsStyle="warning"
+                onClick={() => this.handleClick("")}
+              >
+                all
+              </Button>
+              <div>{this.renderCategory()}</div>
+            </ButtonToolbar>
+          </Row>
+        </CSSTransitionGroup>
         <br />
-        <Row>{this.renderJobList()}</Row>
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}
+        >
+          <Row>{this.renderJobList()}</Row>
+        </CSSTransitionGroup>
         <Row>
           <Pagination size="lg">{this.renderPagination()}</Pagination>
         </Row>
@@ -164,11 +182,11 @@ class JobList extends Component {
 }
 
 function mapStateToProps(state) {
-  return { job: state, category: state };
+  return { job: state, category: state, load: state };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { fetchjobpost, reset, fetchjobcategory, fetchjobbypage },
+    { fetchjobpost, reset, fetchjobcategory, fetchjobbypage, startload, stopload },
     dispatch
   );
 }

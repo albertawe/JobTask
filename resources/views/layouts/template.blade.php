@@ -62,6 +62,7 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
 					<li class="@yield('colorlib_posttask')"><a href="/posttask">Unggah Pekerjaan Baru(poster)</a></li>
 					<li class="@yield('colorlib_browsetask')"><a href="/browsetask">Lowongan Tersedia (worker)</a></li>
 					<li class="@yield('colorlib_mytask')"><a href="/mytask">Pekerjaan Saya</a></li>
+					<li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran Saya (Worker)</a></li>
 					<!-- <li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran yang dikirim (worker)</a></li> -->
 					<li class="@yield('colorlib_message')"><a href="/message">Pesan</a></li>
 					<li class="@yield('colorlib_helptask')"><a href="/email">Bantuan dan Pelaporan</a></li>

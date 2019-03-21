@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\credit;
 use App\UserProfile;
 use App\UserSkill;
 use App\Http\Controllers\Controller;
@@ -66,49 +67,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        /*
-        return User::create([
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            //A TEMPORARY PARAMETER FOR TESTING PURPOSE
-            'user_type_id' => "2"
-        ]);
-
-        $user_skill = new UserSkill;
-        $user_skill->save();
-        $user_profile = new UserProfile;
-        $user_profile->first_name = $data['firstname'];
-        $user_profile->last_name = $data['lastname'];
-        $user_profile->email = $data['email'];
-
-        //A TEMPORARY PARAMETER FOR TESTING PURPOSE
-        $user_profile->birthdate = "1996-07-10";
-        $user_profile->location = "Medan";
-
-        $user_profile->save();
-        */
-
         $user = new User();
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-        //A TEMPORARY PARAMETER FOR TESTING PURPOSE
         $user->user_type_id = '2';
-        $user->save();
-
         $user_profile = new UserProfile();
+        $usercredit = new credit();
+        $usercredit->credit = 0;
         $user_profile->first_name = $data['firstname'];
         $user_profile->last_name = $data['lastname'];
         $user_profile->email = $data['email'];
-
-        // $user_profile->birthdate = "1997-09-10";
-        // $user_profile->location = "Medan";
-
+        $user->save();
+        $user->credit()->save($usercredit);
         $user->user_profile()->save($user_profile);
-
         $user_skill = new UserSkill();
-
-        // $user_skill->cv = "sample.jpg";
-
         $user->user_skill()->save($user_skill);
 
         return $user;

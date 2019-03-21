@@ -17,7 +17,8 @@ class Inti extends Component {
   render() {
     return (
       <div>
-      <JobList />
+      <JobList> 
+      </JobList>
       </div>
     );
   }

@@ -20,6 +20,7 @@ class CreateUserSkill extends Migration
             $table->string('language')->nullable();
             $table->string('qualification')->nullable();
             $table->string('workexperience')->nullable();
+            $table->string('images')->nullable();
             $table->string('cv')->nullable()->default('nothinga.jpg');
             $table->timestamps();
             });

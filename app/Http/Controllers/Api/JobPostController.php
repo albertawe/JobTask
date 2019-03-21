@@ -7,19 +7,24 @@ use Validator;
 use App\Http\Controllers\Controller;
 use App\JobPost;
 use App\PaymentDetail;
+use Carbon\Carbon;
 
 class JobPostController extends Controller
 {
     public function getAllJobPost(){
-        $jobs = JobPost::where(['status' =>'not paid'])->paginate(6);
-        //$job_post = JobPost::get();
+        $today = Carbon::now()->format('Y-m-d');
+        $jobs = JobPost::where('due_date','>=',$today)->where(function($q){
+            $q->where('status', 'not assigned');
+       })
+        ->paginate(6);
         return $jobs;
     }
     public function getJobPostByCategory($id){
-        $jobs = JobPost::where([
-            'job_category' => $id,
-            'status'       => 'not assigned'
-        ])->paginate(6);
+        $today = Carbon::now()->format('Y-m-d');
+        $jobs = JobPost::where('due_date','>=',$today)->where(function($q){
+            $q->where('status', 'not assigned');
+       })->where('job_category', $id)
+        ->paginate(6);
         return $jobs;
     }
     public function getJobPost($id){
@@ -56,8 +61,6 @@ class JobPostController extends Controller
         $job_post->posted_by_id = $request->posted_by_id;
         $job_post->job_type = $request->job_type;
         $job_post->job_category = $request->job_category;
-        // $job_post->status = $request->status;
-        // $job_post->assigned_tasker_id = $request->assigned_tasker_id;
         $job_post->due_date = $request->due_date;
         $job_post->price = $request->price;
         $job_post->address = $request->address;

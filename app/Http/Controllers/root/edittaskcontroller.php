@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\jobcategory;
 use App\JobPost;
 use Auth;
+use App\message;
 use App\PaymentDetail;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,11 @@ class edittaskcontroller extends Controller
 {
     public function showtask($id)
     {
+        $uid = Auth::user()->id;
         $taskdetails = JobPost::find($id);
+        if($taskdetails->posted_by_id != $uid){
+            return redirect()->back();
+        }
         $time = strtotime($taskdetails->due_date);
         $date = date('Y-m-d',$time);
         $categories = jobcategory::all();
@@ -55,6 +60,14 @@ class edittaskcontroller extends Controller
         return redirect()->back()->with('alert-success','Berhasil upload gambar baru');
     }
 
+    public function canceltask($id){
+        $job_post = JobPost::where('id',$id)->first();
+        message::where('job_id', $id)->update(['status' => 'not active']);
+        $job_post->status = 'canceled';
+        $job_post->save();
+        return redirect()->back()->with('alert-success','berhasil cancel task');
+    }
+
     public function updatetask(Request $request, $id)
     {
         $this->validate($request, [
@@ -66,6 +79,7 @@ class edittaskcontroller extends Controller
             'address' => 'required|min:10',
             'jobdescription' => 'required|min:20',
         ]);
+        
         $uid = Auth::user()->id;
         $job_post = JobPost::where('id',$id)->first();
         $job_post->title = $request->title;
@@ -76,12 +90,12 @@ class edittaskcontroller extends Controller
         $job_post->price = $request->price;
         $job_post->address = $request->address;
         $job_post->job_description = $request->jobdescription;
-        if($request->has('image')){
-            $job_post->images = json_encode($request->image);
-        }
-        else {
-            $job_post->images = null;
-        }
+            if($request->has('image')){
+                $job_post->images = json_encode($request->image);
+            }
+            else {
+                $job_post->images = null;
+            }
         $job_post->save();
         return redirect('mytask')->with('alert-success','Berhasil Edit pekerjaan');
     }

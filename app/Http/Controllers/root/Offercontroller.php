@@ -49,6 +49,7 @@ class Offercontroller extends Controller
         $offer->job_title = $request->get('job_title');
         $offer->job_id = $request->get('job_id');
         $offer->nego = $request->get('price');
+        $offer->status = 'active';
         $offer->description = $request->get('description');
         $offer->user_offer_id = $uid;
         $offer->save();

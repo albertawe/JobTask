@@ -10,6 +10,8 @@ export const FETCH_MESSAGE = "FETCH_MESSAGE";
 export const RESET_ACTION = "RESET_ACTION";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
 export const POST_MESSAGE = "POST_MESSAGE";
+export const START_LOAD = "START_LOAD";
+export const STOP_LOAD = "STOP_LOAD";
 
 export function reset(){
   return {
@@ -61,4 +63,16 @@ export function fetchjobcategory() {
     type: FETCH_CATEGORY,
     payload: request
   };
+}
+
+export function startload(){
+  return{
+    type: START_LOAD
+  }
+}
+
+export function stopload(){
+  return{
+    type: STOP_LOAD
+  }
 }

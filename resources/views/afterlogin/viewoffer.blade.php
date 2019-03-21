@@ -18,7 +18,9 @@ colorlib-active
 								<div class="desc">
 								<h3><a href="viewtask/{{$offer->job_id}}">{{$offer->job_title}}</a></h3>
 									<span>Negotiation Price: <small>{{$offer->nego}}</small></br>
-									Description: <small>{{$offer->description}}</small></span></br>
+									Description: <small>{{$offer->description}}</small></br>
+									<small><a href="/deleteoffer/{{$offer->id}}">cancel offer</a></small>
+									</span></br>
 								</div>
                         </div>
 				</div>

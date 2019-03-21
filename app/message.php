@@ -13,4 +13,8 @@ class message extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+    public function jobpost(){
+        return $this->hasOne('App\jobpost');
+    }
 }

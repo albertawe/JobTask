@@ -260,7 +260,7 @@
                             <table border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <p>Hi</p>
+                                        <p>Hi {{$nama}}</p>
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tbody>
                                             <tr>
@@ -269,7 +269,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>ada tasker yang ingin berbicara denganmu</p></center>
+                                                                    <center><p>ada chat room baru yang dibuka denganmu</p></center>
                                                                     <hr>
                                                                     <center><p>Segera login dan memulai pembicaraan</p></center>
                                                                 </div>

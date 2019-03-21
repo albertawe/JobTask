@@ -251,7 +251,7 @@
             <div class="content">
 
                 <!-- START CENTERED WHITE CONTAINER -->
-                <span class="preheader">Pembayaran telah diterima.</span>
+                <span class="preheader">Request {{$reqq}} anda telah selesai.</span>
                 <table class="main">
 
                     <!-- START MAIN CONTENT AREA -->
@@ -269,11 +269,11 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>Pembayaran anda yang berjudul {{$job_name}} telah diterima dengan invoice</p></center>
+                                                                    <center><p>Pembayaran anda atas request {{$reqq}} dengan invoice</p></center>
                                                                     <hr>
                                                                     <center><p>{{ $invoice }}</p></center>
                                                                     <hr>
-                                                                    <center><p>Silahkan memilih tawaran yang anda terima</p></center>
+                                                                    <center><p>Telah selesai, silahkan cek kembali. apabila ada kesalahan silahkan cari kami di jobtaskerindonesia@gmail.com</p></center>
                                                                 </div>
                                                             </td>
                                                         </tr>

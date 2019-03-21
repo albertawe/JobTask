@@ -9,7 +9,7 @@ use App\Http\Requests\TagCrudRequest as StoreRequest;
 use App\Http\Requests\TagCrudRequest as UpdateRequest;
 use App\PaymentDetail;
 use App\user;
-use App\JobPost;
+use App\creditlog;
 use Mail;
 
 class jobpaymentdetailcontroller extends CrudController
@@ -19,19 +19,27 @@ class jobpaymentdetailcontroller extends CrudController
         $paymentdetail = PaymentDetail::where('id',$id)->first();
         $paymentdetail->paid_status = 'paid';
         $invid = $paymentdetail->invoice;
-        $job = JobPost::where('payment_id',$paymentdetail->payment_id)->first();
-        $jobname = $job->title;
-        $user = User::where('id', $job->posted_by_id)->with(['user_profile'])->first();
+        $credit = creditlog::where('invoice',$invid)->first();
+        $uid = $credit->user_id;
+        $user = User::where('id', $uid)->with(['user_profile','credit'])->first();
         $email = $user->email;
-        $job->status = 'not assigned';
+        $req = $credit->status;
+        if($credit-status == 'topup'){
+        $user->credit->credit = $user->credit->credit + $credit->nominal;
+        }
+        elseif($credit-status == 'withdraw'){
+            $user->credit->credit = $user->credit->credit - $credit->nominal;
+        }
         $firstname = $user->user_profile->first_name;
         $lastname = $user->user_profile->last_name;
-        $job->save();
+        $credit->status = $req." "."completed";
+        $credit->save();
+        $user->credit->save();
         $paymentdetail->save();
         try{
-            Mail::send('emailuserpaid',['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invid], function ($message) use ($email)
+            Mail::send('emailuserpaid',['job_name' => $jobname,'reqq' => $req, 'first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invid], function ($message) use ($email)
             {
-                $message->subject('pembayaran anda telah kami terima');
+                $message->subject('request anda telah selesai');
                 $message->from('jobtaskerindonesia@gmail.com');
                 $message->to($email);
             });
@@ -46,7 +54,6 @@ class jobpaymentdetailcontroller extends CrudController
         $this->crud->setModel('App\PaymentDetail');
         $this->crud->setRoute(config('backpack.base.route_prefix')  . '/jobpaymentdetail');
         $this->crud->setEntityNameStrings('payment detail', 'payment details');
-        
         $this->crud->setColumns(['payment_id','invoice','paid_status']);
         $this->crud->addButtonFromView('line', 'sendemail', 'sendemail', 'beginning');
         $this->crud->addField([
@@ -64,7 +71,6 @@ class jobpaymentdetailcontroller extends CrudController
         'options'     => [ // the key will be stored in the db, the value will be shown as label; 
             "paid" => "paid",
             "paid pending" => "paid pending",
-            "not paid" => "not paid"
         ],
         ]);
     }
