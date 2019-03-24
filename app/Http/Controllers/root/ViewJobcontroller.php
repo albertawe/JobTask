@@ -51,11 +51,11 @@ class ViewJobcontroller extends Controller
     {
         $taskdetails = JobPost::find($id);
         $price = $taskdetails->price;
+        $tid = $taskdetails->id;
         $user_id = Auth::user()->id;
         $paymentdetails = PaymentDetail::where('payment_id',$taskdetails->payment_id)->first();
-        $offers = offer::where('nego','<=',$price)->where([
-            'job_id' == $taskdetails->id,
-            'status' == 'active'])->get();
+
+        $offers = offer::where('nego', '<=', $price)->where('job_id',$tid)->where('status','active')->get();
         $uid = strval($user_id);
         // $offers = $offers->where('nego','<=',$price);
         return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid'));

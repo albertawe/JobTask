@@ -26,11 +26,18 @@ class conversationcontroller extends Controller
 
 
     public function post_message(Request $request, $id){
-        $user = Auth::user()->id;
+        $uid = Auth::user()->id;
+        $user = User::where('id', $uid)->first();
         $con_id = $id;
         if (!empty($request->content)) {
             $con = new conversation;
             $con->cons_id = $con_id;
+            if($user->user_type_id == 1){
+                $con->role = 'admin';
+            }
+            else{
+                $con->role = 'user';
+            }
             $con->content = $request->content;
             $con->sender_id = $user;
             $con->save();

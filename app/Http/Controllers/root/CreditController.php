@@ -23,15 +23,17 @@ class CreditController extends Controller
     }
 
     public function topup(Request $request){
+        $uid = Auth::user()->id;
         $this->validate($request, [
             'price' => 'required'
         ]);
         $credit = new creditlog;
         $payment = new PaymentDetail;
-        $payment_id = sprintf('TP-%07d', creditlog::orderBy('id', 'desc')->first()->id + 1);
+        $payment_id = sprintf('TP-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $nominal = $request->price;
         $credit->status = 'topup';
+        $credit->user_id = $uid;
         $credit->nominal = $nominal;
         $credit->reason = 'request topup';
         $credit->payment_id = $payment_id;
@@ -56,10 +58,11 @@ class CreditController extends Controller
         catch (Exception $e){
             return response (['status' => false,'errors' => $e->getMessage()]);
         }
-        return back()->with('alert-success','Request topup telah berhasil diajukan, segera cek email anda proses selanjutnya');
+        return back()->with('alert-success','Request topup telah berhasil diajukan, segera cek email anda untuk proses selanjutnya');
     }
 
     public function withdraw(Request $request){
+        $uid = Auth::user()->id;
         $this->validate($request, [
             'price' => 'required'
         ]);
@@ -69,6 +72,7 @@ class CreditController extends Controller
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $nominal = $request->price;
         $credit->status = 'withdraw';
+        $credit->user_id = $uid;
         $credit->nominal = $nominal;
         $credit->reason = 'request withdraw';
         $credit->payment_id = $payment_id;

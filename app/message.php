@@ -15,6 +15,6 @@ class message extends Model
     }
 
     public function jobpost(){
-        return $this->hasOne('App\jobpost');
+        return $this->belongsTo('App\jobpost','job_id');
     }
 }

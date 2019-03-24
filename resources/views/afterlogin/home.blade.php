@@ -11,13 +11,16 @@ colorlib-active
 					<div class="row">
 							<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 								<span class="heading-meta">Dashboard</span>
-								<h2 class="colorlib-heading" style="margin-bottom:10px">your wallet credit : {{$user->credit->credit}} 
+								<h2 class="colorlib-heading" style="margin-bottom:10px">your wallet credit : Idr.{{$user->credit->credit}} 
 								<a href="/topup" target="_blank">(<u>topup</u>)</a>
 								<a href="/withdraw" target="_blank">(<u>withdrawal</u>)</a>
 								@if($user->creditlogs->isNotEmpty())
 								<a href="/log" target="_blank">(<u>detail</u>)</a>
 								@endif</h2>
 								<h2 class="colorlib-heading" style="margin-bottom:10px">Announcement</h2>
+								@if($blogs->isEmpty())
+								<h5 style="margin-bottom:10px">belum ada pengumuman dari admin</h5>
+								@endif
 							</div>
 					</div>
 				@foreach($blogs as $blog)

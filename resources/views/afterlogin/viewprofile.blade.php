@@ -76,7 +76,7 @@
 													<div class="itm" style="width: 300px; 
 													height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
 													">
-													<img src="{{ URL::to('/images/quali'.$image)}}" >
+													<img src="{{ URL::to('/images/quali/'.$image)}}" >
 													</div>
 												@endforeach
 											@endif

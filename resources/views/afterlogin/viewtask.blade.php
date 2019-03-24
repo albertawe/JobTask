@@ -7,8 +7,10 @@
 							<span class="heading-meta">View Task Info</span>
 							<h2 class="colorlib-heading">All you need to know about this task</h2>
 							@if( $uid == $taskdetails->posted_by_id && $taskdetails->status != 'canceled')
-							<h4><a href="/posttasks/{{$taskdetails->id}}">Edit this task's information </a></h4><Br>
-							<h4 style="color:red"><a href="/canceltasks/{{$taskdetails->id}}">Edit this task's information </a></h4>
+							<h4 style="margin-bottom:0px"><a href="/posttasks/{{$taskdetails->id}}" style="margin-bottom:10px">Edit this task's information </a></h4><Br>
+							@if($taskdetails->status != 'assigned' && $taskdetails->status != 'finished')
+							<h4 style="color:red"><a style="color:red" href="/canceltasks/{{$taskdetails->id}}">cancel this task</a></h4>
+							@endif
 							@endif
 						</div>
 				</div>
@@ -72,14 +74,12 @@
 									<p>Nego Price: {{$offer->nego}}</p></br>
 									</span>
 									<input type="button" onclick="location.href='{{URL::route('create-message-job',[$offer->user_offer_id,$taskdetails->id])}}'" class="btn btn-info col-md-10" value="send this tasker a message">
-									<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" class="btn btn-info col-md-10" value="see this tasker's profile">
+									<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" target="_blank" class="btn btn-info col-md-10" value="see this tasker's profile">
 									<input type="button" onclick="location.href='accept_offer/{{$offer->id}}';" class="btn btn-info col-md-10" value="choose this offer">
 								@endforeach
 							@elseif($taskdetails->posted_by_id == $uid && $taskdetails->status == 'assigned')
 								<a href="finish_offer/{{$taskdetails->id}}"><p>Click this when the task is finished</p></a>
 							@elseif($taskdetails->status == 'finished')
-								<p>this task is finished, waiting for poster's payment</p>
-							@elseif($taskdetails->status == 'completed')
 								<p>this task is finished, poster is paid</p>
 							@elseif($taskdetails->posted_by_id !== $uid)
 							@if($taskdetails->status == 'not assigned')
@@ -88,6 +88,7 @@
 										<form method="post" action="{{url('postoffer')}}" enctype="multipart/form-data">
 										@csrf
 											<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
+											<input type="button" onclick="location.href='{{URL::route('create-message-job',[$taskdetails->posted_by_id,$taskdetails->id])}}'" class="btn btn-info col-md-10" value="send this poster a message">
 											<div class="form-group">
 											<span class="heading-meta">Send few words to describe why you are the perfect person</span>
 											@if ($errors->has('description'))

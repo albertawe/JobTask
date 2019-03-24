@@ -18,16 +18,16 @@ class jobpaymentdetailcontroller extends CrudController
     {
         $paymentdetail = PaymentDetail::where('id',$id)->first();
         $paymentdetail->paid_status = 'paid';
-        $invid = $paymentdetail->invoice;
-        $credit = creditlog::where('invoice',$invid)->first();
+        $invid = $paymentdetail->payment_id;
+        $credit = creditlog::where('payment_id',$invid)->first();
         $uid = $credit->user_id;
         $user = User::where('id', $uid)->with(['user_profile','credit'])->first();
         $email = $user->email;
         $req = $credit->status;
-        if($credit-status == 'topup'){
+        if($req == 'topup'){
         $user->credit->credit = $user->credit->credit + $credit->nominal;
         }
-        elseif($credit-status == 'withdraw'){
+        elseif($req == 'withdraw'){
             $user->credit->credit = $user->credit->credit - $credit->nominal;
         }
         $firstname = $user->user_profile->first_name;
@@ -37,7 +37,7 @@ class jobpaymentdetailcontroller extends CrudController
         $user->credit->save();
         $paymentdetail->save();
         try{
-            Mail::send('emailuserpaid',['job_name' => $jobname,'reqq' => $req, 'first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invid], function ($message) use ($email)
+            Mail::send('emailuserpaid',['reqq' => $req, 'first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invid], function ($message) use ($email)
             {
                 $message->subject('request anda telah selesai');
                 $message->from('jobtaskerindonesia@gmail.com');

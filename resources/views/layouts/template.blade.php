@@ -65,7 +65,7 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
 					<li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran Saya (Worker)</a></li>
 					<!-- <li class="@yield('colorlib_offertask')"><a href="/postoffer">Tawaran yang dikirim (worker)</a></li> -->
 					<li class="@yield('colorlib_message')"><a href="/message">Pesan</a></li>
-					<li class="@yield('colorlib_helptask')"><a href="/email">Bantuan dan Pelaporan</a></li>
+					<li class="@yield('colorlib_helptask')"><a href="/reportmessage">Bantuan dan Pelaporan</a></li>
 					@if(Auth::user()->user_type_id == 1)
 					<li><a href="/admin/dashboard">admin page</a></li>
 					@endif

@@ -23,7 +23,7 @@ class TagCrudRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest {
     public function rules()
     {
         return [
-            'payment_id' => 'required|min:5|max:50'
+            // 'payment_id' => 'required|min:5|max:50'
         ];
     }
 
