@@ -14,9 +14,13 @@ Route::group([
 ], function () { // custom admin routes
     CRUD::resource('jobcategory', 'jobcategorycontroller');
     CRUD::resource('reportmessage', 'reportmessagecontroller');
+    CRUD::resource('reportmessagecons', 'reportmessageconscontroller');
+    CRUD::resource('message', 'messagecontroller');
+    CRUD::resource('messagecons', 'messageconscontroller');
     CRUD::resource('jobpaymentdetail', 'jobpaymentdetailcontroller');
     CRUD::resource('jobpost', 'jobpostcontroller');
     CRUD::resource('blog', 'blogcontroller');
     CRUD::resource('users', 'ListUsersController');
     CRUD::resource('userprofile', 'userprofilecontroller');
+    CRUD::resource('userskill', 'userskillcontroller');
 }); // this should be the absolute last line of this file

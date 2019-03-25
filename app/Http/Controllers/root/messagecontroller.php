@@ -16,11 +16,14 @@ class messagecontroller extends Controller
     public function create($id,$jobid){
         $user1 = Auth::user()->id;
         $user2 = $id;
-        $check = DB::select("SELECT user1, user2 FROM tasker.messages WHERE 
-                ('" . $user1 . "' IN (user1) AND '" . $user2 . "' IN (user2)) 
-                OR ('" .$user1 . "' IN (user2) AND '" . $user2 . "' IN(user1)) AND 
-                ('" .$jobid ."' IN (job_id))
-                ;");
+        // $check = DB::select("SELECT user1, user2 FROM tasker.messages WHERE 
+        //         ('" . $user1 . "' IN (user1) AND '" . $user2 . "' IN (user2)) 
+        //         OR ('" .$user1 . "' IN (user2) AND '" . $user2 . "' IN(user1)) AND 
+        //         ('" . $jobid . "' IN (job_id))
+        //         ;");
+        $check = message::where('job_id',$jobid)->where(function($q)use($user1,$user2){
+            $q->where([['user1', $user1],['user2',$user2]])->orWhere([['user1', $user2],['user2',$user1]]);
+       })->first();
         if(empty($check)){
             $job = JobPost::where('id', $jobid)->first();
             $posterid = $job->posted_by_id;
@@ -59,7 +62,7 @@ class messagecontroller extends Controller
                 $firstname2 = $user->user_profile->first_name;
                 $message->name1 = $firstname2;
                 $message->name2 = $firstname;
-                $email = $user->email;
+                $email = $userr->email;
                 $message->save();
                 try{
                     Mail::send('openchatmail', ['nama' => $firstname], function ($messages) use ($email)
