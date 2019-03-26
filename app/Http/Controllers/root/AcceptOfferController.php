@@ -27,7 +27,7 @@ class AcceptOfferController extends Controller
         $user->credit->save();
         $job_id = $offer->job_id;
         $user_offer_id = $offer->user_offer_id;
-        $job = JobPost::find($job_id);
+        $job = JobPost::where('id',$job_id)->first();
         $uid = $job->assigned_tasker_id;
         $job->status = "assigned";
         $job->price = $offer->nego;

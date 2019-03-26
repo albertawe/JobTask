@@ -6,7 +6,7 @@
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
 							<span class="heading-meta">View Task Info</span>
 							<h2 class="colorlib-heading">All you need to know about this task</h2>
-							@if( $uid == $taskdetails->posted_by_id && $taskdetails->status == 'not assigned')
+							@if( $uid == $taskdetails->posted_by_id && $taskdetails->status = 'not assigned')
 							@if($taskdetails->due_date < $today)
 								<h4 style="margin-bottom:10px;color:red;">you cannot see and choose any offer when the duedate has past, <Br>change it at the edit task button to accept offer</h4>
 							@endif

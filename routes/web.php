@@ -64,3 +64,4 @@ Route::get('/generate',"root\Reportmessagecontroller@generate")->middleware('aut
 Route::get('/viewreport/{id}',"root\Reportmessagecontroller@getcons")->middleware('auth');
 Route::post('/viewreport/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
 Route::post('/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
+Route::get('/view/{id}', 'root\tescontroller@index')->middleware('auth');
