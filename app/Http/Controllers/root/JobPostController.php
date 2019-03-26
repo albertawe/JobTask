@@ -8,6 +8,7 @@ use App\jobcategory;
 use App\JobPost;
 use Auth;
 use App\PaymentDetail;
+use Carbon\Carbon;
 
 class JobPostController extends Controller
 {
@@ -93,11 +94,12 @@ class JobPostController extends Controller
      */
     public function show($id)
     {
+        $today = Carbon::now()->format('Y-m-d');
         $taskdetails = JobPost::find($id);
         $time = strtotime($taskdetails->due_date);
         $date = date('Y-m-d',$time);
         $categories = jobcategory::all();
-        return view('afterlogin.edittask',compact('taskdetails','categories','date'));
+        return view('afterlogin.edittask',compact('taskdetails','categories','date','today'));
     }
 
     /**

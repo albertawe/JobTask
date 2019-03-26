@@ -24,6 +24,7 @@ class CreateUserProfile extends Migration
         $table->string('email')->nullable();
         $table->date('birthdate')->nullable();
         $table->string('location')->nullable();
+        $table->string('transfer_name')->nullable();
         $table->timestamps();
         });
     }

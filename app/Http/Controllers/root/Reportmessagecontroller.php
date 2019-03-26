@@ -55,6 +55,7 @@ class reportmessagecontroller extends Controller
         }
         return back()->with('alert-success','Request pembukaan chatroom pelaporan berhasil dibuka');
     }
+
     public function post_message(Request $request, $id){
         $uid = Auth::user()->id;
         $user = User::where('id', $uid)->first();
@@ -74,6 +75,7 @@ class reportmessagecontroller extends Controller
         }
         return redirect()->back();
     }
+
     public function getcons($id)
     {
         $uid = Auth::user()->id;
@@ -84,6 +86,7 @@ class reportmessagecontroller extends Controller
         $conversations = $message->reportcon;
         return view('afterlogin.reportcons',compact('conversations','message'));
     }
+    
     public function openchatadmin($id) 
     {
         $message = reportmessage::where('id',$id)->with(['reportcon'])->first();

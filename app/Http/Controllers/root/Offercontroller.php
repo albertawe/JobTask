@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\offer;
 use Redirect;
 use Auth;
+use App\user;
 use App\JobPost;
 class Offercontroller extends Controller
 {
@@ -52,6 +53,11 @@ class Offercontroller extends Controller
         $offer->status = 'active';
         $offer->description = $request->get('description');
         $offer->user_offer_id = $uid;
+        $user = User::where('id', $uid)->with(['user_profile'])->first();
+        if($user->user_profile->bank == null || $user->user_profile->no_rek == null || $user->user_profile->transfer_name == null)
+        {
+            return \Redirect::back()->with('viewtask')->with('alert-failed','informasi bank anda belum diisi');
+        }
         $offer->save();
         return \Redirect::back()->with('viewtask')->with('alert-success','Berhasil Kirim Tawaran');
     }

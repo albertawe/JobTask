@@ -8,6 +8,8 @@ use App\JobPost;
 use App\PaymentDetail;
 use App\offer;
 use Auth;
+use Carbon\Carbon;
+
 class ViewJobcontroller extends Controller
 {
     /**
@@ -49,6 +51,7 @@ class ViewJobcontroller extends Controller
      */
     public function show($id)
     {
+        $today = Carbon::now()->format('Y-m-d');
         $taskdetails = JobPost::find($id);
         $price = $taskdetails->price;
         $tid = $taskdetails->id;
@@ -58,7 +61,7 @@ class ViewJobcontroller extends Controller
         $offers = offer::where('nego', '<=', $price)->where('job_id',$tid)->where('status','active')->get();
         $uid = strval($user_id);
         // $offers = $offers->where('nego','<=',$price);
-        return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid'));
+        return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid','today'));
     }
 
     /**

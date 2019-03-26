@@ -10,6 +10,7 @@ use Auth;
 use App\User;
 use DB;
 use App\JobPost;
+use App\reportmessage;
 
 class messagecontroller extends Controller
 {
@@ -82,66 +83,6 @@ class messagecontroller extends Controller
         }
     }
 
-    public function createreport($id,$jobid){
-        $user1 = Auth::user()->id;
-        $user2 = $id;
-        $check = DB::select("SELECT user1, user2 FROM tasker.messages WHERE 
-                ('" . $user1 . "' IN (user1) AND '" . $user2 . "' IN (user2)) 
-                OR ('" .$user1 . "' IN (user2) AND '" . $user2 . "' IN(user1)) AND 
-                ('" .$jobid ."' IN (job_id))
-                ;");
-        if(empty($check)){
-            $job = JobPost::where(['posted_by_id', $jobid])->first();
-            $posterid = $job->posted_by_id;
-            $message = new message;
-            $message->user1 = $user1;
-            $message->user2 = $user2;
-            $message->status = 'active';
-            $message->job_id = $jobid;
-            if($user1 == $posterid){
-                $user = User::where('id', $user2)->with(['user_profile'])->first();
-                $firstname = $user->user_profile->first_name;
-                $email = $user->email;
-
-            try{
-                Mail::send('openchatmail', ['nama' => $firstname], function ($messages) use ($email)
-                {
-                    $messages->subject('your possible tasker has opened a chatroom with you');
-                    $messages->from('jobtaskerindonesia@gmail.com');
-                    $messages->to($email);
-                });
-                return redirect('/message');
-            }
-            catch (Exception $e){
-                return response (['status' => false,'errors' => $e->getMessage()]);
-            }
-            }
-            else {
-                $user = User::where('id', $user1)->with(['user_profile'])->first();
-                $userr = User::where('id', $user2)->with(['user_profile'])->first();
-                $firstname = $userr->user_profile->first_name;
-                $firstname2 = $user->user_profile->first_name;
-                $message->name1 = $firstname2;
-                $message->name2 = $firstname;
-                $email = $user->email;
-                $message->save();
-                try{
-                    Mail::send('openchatmail', ['nama' => $firstname], function ($messages) use ($email)
-                    {
-                        $messages->subject('your possible worker has opened a chatroom with you');
-                        $messages->from('jobtaskerindonesia@gmail.com');
-                        $messages->to($email);
-                    });
-                    return redirect('/message');
-                }
-                catch (Exception $e){
-                    return response (['status' => false,'errors' => $e->getMessage()]);
-                }
-            }   
-        } else {
-            return redirect('/message');
-        }
-    }
     public function index()
     {
         $uid = Auth::user()->id;

@@ -65,7 +65,8 @@ class edittaskcontroller extends Controller
         message::where('job_id', $id)->update(['status' => 'not active']);
         $job_post->status = 'canceled';
         $job_post->save();
-        return redirect()->back()->with('alert-success','berhasil cancel task');
+        return redirect('dashboard');
+        //return redirect()->back()->with('alert-success','berhasil cancel task');
     }
 
     public function updatetask(Request $request, $id)

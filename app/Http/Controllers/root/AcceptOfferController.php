@@ -50,8 +50,22 @@ class AcceptOfferController extends Controller
         $payment->save();
         $user2 = User::where('id', $offer->user_offer_id)->with(['user_profile','credit'])->first();
         $email = $user2->email;
+        $email2 = $user->email;
         $firstname = $user2->user_profile->first_name;
         $lastname = $user2->user_profile->last_name;
+        $firstname2 = $user->user_profile->first_name;
+        $lastname2 = $user->user_profile->last_name;
+        try{
+            Mail::send('emailacceptoff', ['invoice' => $invoice ,'payment_id' => $payment_id,'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email2)
+            {
+                $message->subject('your have chosen your worker');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email2);
+            });
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
         try{
             Mail::send('emailaccoff', ['job_name' => $jobname ,'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
             {
@@ -59,7 +73,7 @@ class AcceptOfferController extends Controller
                 $message->from('jobtaskerindonesia@gmail.com');
                 $message->to($email);
             });
-            return redirect()->back();
+            return redirect('mytask')->with('alert-success','Berhasil menerima tawaran');
         }
         catch (Exception $e){
             return redirect()->back();
@@ -104,7 +118,7 @@ class AcceptOfferController extends Controller
                 $message->from('jobtaskerindonesia@gmail.com');
                 $message->to($email);
             });
-            return redirect()->back();
+            return redirect('mytask')->with('alert-success','pekerjaan telah selesai dikerjakan');
         }
         catch (Exception $e){
             return redirect()->back();

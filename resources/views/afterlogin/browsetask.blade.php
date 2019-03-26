@@ -11,7 +11,9 @@ colorlib-active
 							<h2 class="colorlib-heading">Tasks for you to work on</h2>
 						</div>
 				</div>
+				<div class="row">
 				<div id="root"></div>
+				</div>
 				<script src="{{mix('/js/Main.js')}}" ></script>
 			</div>
 		</div>

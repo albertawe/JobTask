@@ -32,7 +32,7 @@ colorlib-active
 											@endif
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">Can it be done remotely?</span>
+										<span class="heading-meta">How do you want it to be done?</span>
 										<select name="type">
 											<option value="remote">remote</option>
 											<option value="directly">directly</option>    

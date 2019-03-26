@@ -54,7 +54,7 @@ colorlib-active
 										</div>
 										<div class="form-group">
 										<span class="heading-meta">qualification</span>
-											<input type="text" value="{{$user->user_skill->qualification}}" class="form-control" placeholder="any qualification you have" name="qualification">
+											<input type="text" value="{{$user->user_skill->qualification}}" class="form-control" placeholder="any qualification you have (Ex: certification at A, cerfitication at B)" name="qualification">
 										</div>
 										@if($user->user_skill->images)
 								        @foreach(json_decode($user->user_skill->images, true) as $image)
@@ -86,7 +86,7 @@ colorlib-active
 							@csrf
 							<div class="input-group control-group increment">
 							<div class="form-group">
-								<span class="heading-meta">upload more picture to convince your potential poster</span>
+								<span class="heading-meta">upload more picture to convince your potential poster (Ex: picture of your certificate)</span>
 								<input type="file" name="pic[]" class="form-control" multiple>
 							</div>
 							</div>
