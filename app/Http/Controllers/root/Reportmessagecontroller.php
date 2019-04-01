@@ -17,15 +17,23 @@ class reportmessagecontroller extends Controller
         $messages = reportmessage::where([
             ['user_id','=',$uid],
             ['status','=','active']
+        ])->orWhere([
+            ['user_id','=',$uid],
+            ['status','=','process']
         ])->get();
-        return view('afterlogin.reportmessage',compact('messages'));
+        $pastmessages = reportmessage::where([
+            ['user_id','=',$uid],
+            ['status','=','not active']
+        ])->get();
+        return view('afterlogin.reportmessage',compact('messages','pastmessages'));
     }
 
-    public function generate(){
+    public function generate(Request $request){
         $uid = Auth::user()->id;
         $message = new reportmessage;
         $ticket = sprintf('T-%07d', reportmessage::orderBy('id', 'desc')->first()->id + 1);
         $message->ticket = $ticket;
+        $message = $request->title;
         $message->user_id = $uid;
         $message->status = 'active';
         $user = User::where('id', $uid)->first();

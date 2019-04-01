@@ -16,7 +16,7 @@ class userprofilecontroller extends CrudController
         $this->crud->removeButton('update');
         $this->crud->setRoute(config('backpack.base.route_prefix')  . '/userprofile');
         $this->crud->setEntityNameStrings('UserProfile', 'UserProfiles');
-        $this->crud->setColumns(['first_name','last_name','email','bank','no_rek','birthdate','location','tagline']);
+        $this->crud->setColumns(['user_id','first_name','last_name','email','bank','no_rek','transfer_name','birthdate','location','tagline']);
         // $this->crud->addField([
         // 'name' => 'first_name',
         // 'label' => 'first name'

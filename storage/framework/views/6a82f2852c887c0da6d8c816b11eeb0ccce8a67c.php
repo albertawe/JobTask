@@ -9,8 +9,8 @@
 							<?php if($taskdetails->due_date < $today): ?>
 								<h4 style="margin-bottom:10px;color:red;">you cannot see and choose any offer when the duedate has past, <Br>change it at the edit task button to accept offer</h4>
 							<?php endif; ?>
-							<h4 style="margin-bottom:0px"><a href="/posttasks/<?php echo e($taskdetails->id); ?>" style="margin-bottom:10px">Edit this task's information </a></h4><Br>
 							<?php if($taskdetails->status != 'assigned' && $taskdetails->status != 'finished'): ?>
+							<h4 style="margin-bottom:0px"><a href="/posttasks/<?php echo e($taskdetails->id); ?>" style="margin-bottom:10px">Edit this task's information </a></h4><Br>
 							<h4 style="color:red"><a style="color:red" href="/canceltasks/<?php echo e($taskdetails->id); ?>">cancel this task</a></h4>
 							<?php endif; ?>
 							<?php endif; ?>
@@ -44,6 +44,7 @@
 									<div class="itm" style="width: 300px; 
 									height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
 									">
+									(right click->view image at new tab) for better experience
 									<img src="<?php echo e(URL::to('/images/'.$image)); ?>" >
 									</div>
 								<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -89,8 +90,9 @@
 								<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
 										<form method="post" action="<?php echo e(url('postoffer')); ?>" enctype="multipart/form-data">
 										<?php echo csrf_field(); ?>
-											<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
+											<input type="button" onclick="location.href='viewprofile/<?php echo e($taskdetails->posted_by_id); ?>';" target="_blank" class="btn btn-info col-md-10" value="see poster's profile">
 											<input type="button" onclick="location.href='<?php echo e(URL::route('create-message-job',[$taskdetails->posted_by_id,$taskdetails->id])); ?>'" class="btn btn-info col-md-10" value="send this poster a message">
+											<span class="heading-meta"><h5>interested? show the poster that you deserve this task</h5></span>
 											<div class="form-group">
 											<span class="heading-meta">Send few words to describe why you are the perfect person</span>
 											<?php if($errors->has('description')): ?>

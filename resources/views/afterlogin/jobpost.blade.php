@@ -11,6 +11,16 @@ colorlib-active
 							<h2 class="colorlib-heading">*the more specific your description, the faster you get your tasker</h2>
 						</div>
 				</div>
+				@if(\Session::has('alert-failed'))
+					<div class="alert alert-failed">
+						<div style="color:red">{{Session::get('alert-failed')}}</div>
+					</div>
+				@endif
+				@if(\Session::has('alert-success'))
+					<div class="alert alert-success">
+						<div>{{Session::get('alert-success')}}</div>
+					</div>
+				@endif
 					<div class="col-md-7 col-md-push-1">
 						<div class="colorlib-narrow-content">
 							<div class="row">

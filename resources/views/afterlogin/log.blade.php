@@ -146,6 +146,10 @@
         @if($log->status == 'topup')
         <form method="POST" action="confirmation/{{$log->payment_id}}">
 			@csrf
+                <div class="form-group">
+					<span class="heading-meta">Upload bukti pembayaran</span>
+				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image">
+				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
 				</div>

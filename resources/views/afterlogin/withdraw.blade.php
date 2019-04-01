@@ -7,7 +7,7 @@
 							<span class="heading-meta">withdraw your credit</span>
                             @if(\Session::has('alert-failed'))
                                 <div class="alert alert-failed">
-                                    <div>{{Session::get('alert-failed')}}</div>
+                                    <div style="color:red">{{Session::get('alert-failed')}}</div>
                                 </div>
                             @endif
                             @if(\Session::has('alert-success'))

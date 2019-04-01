@@ -14,9 +14,77 @@ use App\PaymentDetail;
 use App\message;
 class AcceptOfferController extends Controller
 {
+
     public function Accept($offer_id){
-        $offer = offer::find($offer_id);
-        $id = Auth::user()->id;
+        $today = Carbon::now()->format('Y-m-d');
+        $newDate = date("Y.m.d",strtotime($today."+2 day"));
+        $offer = offer::where('id',$offer_id)->first();
+        $user_offer_id = $offer->user_offer_id;
+        $job_id = $offer->job_id;
+        $job = JobPost::where('id',$job_id)->first();
+        $job->assigned_tasker_id = $user_offer_id;
+        $job->offer_id = $offer_id;
+        $offer->deadline = $newDate;
+        $offer->save();
+        $job->save();
+        $jobname = $job->title;
+        $user = User::where('id', $user_offer_id)->with(['user_profile'])->first();
+        $email = $user->email;
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
+        try{
+            Mail::send('emailaccoff', ['job_name' => $jobname ,'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+            {
+                $message->subject('your offer accepted,will you take it?');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+            return redirect('mytask')->with('alert-success','Berhasil menerima tawaran');
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
+        return redirect('mytask')->with('alert-success','Berhasil menerima tawaran, menunggu kabar dari worker');
+    }
+
+    public function rejectbyworker($jobid){
+        $job = JobPost::where('id',$jobid)->first();
+        $offer_id = $job->offer_id;
+        $offer = offer::where('id',$offer_id)->first();
+        $offer->deadline = null;
+        $offer->status = 'not active';
+        $jobname = $job->title;
+        $job->assigned_tasker_id = null;
+        $job->offer_id = null;
+        $offer->save();
+        $job->save();
+        $id = $job->posted_by_id;
+        $user = User::where('id', $id)->with(['user_profile','credit'])->first();
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
+        $email = $user->email;
+        try{
+            Mail::send('emailoffrejected', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+            {
+                $message->subject('worker are not available for this job, please choose other offer');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
+        return redirect()->back();
+    }
+
+    public function acceptbyworker($jobid){
+        $job = JobPost::where('id',$jobid)->first();
+        $offer_id = $job->offer_id;
+        $offer = offer::where('id',$offer_id)->first();
+        $offer->deadline = null;
+        $offer->status = 'chosen';
+        $offer->save();
+        $id = $job->posted_by_id;
         $user = User::where('id', $id)->with(['user_profile','credit'])->first();
         if ($user->credit->credit < $offer->nego){
             return back()->with('alert-failed','Credit tidak cukup untuk memilih tawaran tersebut');
@@ -25,13 +93,8 @@ class AcceptOfferController extends Controller
         $deducted_credit = $current_credit - $offer->nego;
         $user->credit->credit = $deducted_credit;
         $user->credit->save();
-        $job_id = $offer->job_id;
-        $user_offer_id = $offer->user_offer_id;
-        $job = JobPost::where('id',$job_id)->first();
-        $uid = $job->assigned_tasker_id;
         $job->status = "assigned";
         $job->price = $offer->nego;
-        $job->assigned_tasker_id = $user_offer_id;
         $jobname = $job->title;
         $job->save();
         $payment = new PaymentDetail;
@@ -69,17 +132,17 @@ class AcceptOfferController extends Controller
         try{
             Mail::send('emailaccoff', ['job_name' => $jobname ,'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
             {
-                $message->subject('your offer accepted!!');
+                $message->subject('your have accepted a new task');
                 $message->from('jobtaskerindonesia@gmail.com');
                 $message->to($email);
             });
-            return redirect('mytask')->with('alert-success','Berhasil menerima tawaran');
+            return redirect('mytask')->with('alert-success','Berhasil menerima pekerjaan');
         }
         catch (Exception $e){
             return redirect()->back();
-        }
-        
+        } 
     }
+    
     public function finish($id){
         $job = JobPost::find($id);
         $job->status = 'finished';
@@ -123,21 +186,10 @@ class AcceptOfferController extends Controller
         catch (Exception $e){
             return redirect()->back();
         }
-        // try{
-        //     Mail::send('emailfinishjobadmin', ['job_name' => $jobname, 'job_id' => $jobid], function ($message)
-        //     {
-        //         $message->subject('ada pekerjaan yang selesai');
-        //         $message->from('jobtaskerindonesia@gmail.com');
-        //         $message->to('jobtaskerindonesia@gmail.com');
-        //     });
-            
-        // }
-        // catch (Exception $e){
-        //     return redirect()->back();
-        // }
     }
+
     public function cancel($id){
-        $offer = offer::where('id', $id);
+        $offer = offer::where('id', $id)->first();
         $offer->status = 'not active';
         $offer->save();
         return redirect()->back();

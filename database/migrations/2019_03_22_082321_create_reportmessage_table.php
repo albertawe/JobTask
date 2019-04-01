@@ -15,6 +15,7 @@ class CreateReportmessageTable extends Migration
     {
         Schema::create('reportmessages', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('title');
             $table->string('ticket');
             $table->integer('user_id');
             $table->string('status');

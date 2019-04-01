@@ -18,6 +18,8 @@ class CreateJobPostTable extends Migration
             $table->string('payment_id')->unique();
             $table->string('posted_by_id');
             $table->string('title');
+            $table->string('poster_acc');
+            $table->string('worker_acc');
             $table->string('job_type');
             $table->string('job_category');
             $table->string('status')->default('not assigned');

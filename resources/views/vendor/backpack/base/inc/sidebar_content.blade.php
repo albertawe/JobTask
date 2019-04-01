@@ -12,3 +12,5 @@
 <!-- <li><a href="{{ backpack_url('offer') }}"><i class="fa fa-files-o"></i> <span>offers</span></a></li> -->
 <li><a href="{{ backpack_url('userprofile') }}"><i class="fa fa-files-o"></i> <span>User Profile</span></a></li>
 <li><a href="{{ backpack_url('userskill') }}"><i class="fa fa-files-o"></i> <span>User Skill</span></a></li>
+<li><a href="{{ backpack_url('creditlog') }}"><i class="fa fa-files-o"></i> <span>credit log</span></a></li>
+<li><a href="{{ backpack_url('reporttask') }}"><i class="fa fa-files-o"></i> <span>report task</span></a></li>

@@ -49,19 +49,19 @@ colorlib-active
 											<input type="file" value="" class="form-control" placeholder="UploadImage" name="image">
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">First Name</span>
+										<span class="heading-meta" style="color:green">First Name (necessary to post task, post offer and withdraw credit)</span>
 											<input type="text" value="{{$user->user_profile->first_name}}" class="form-control" placeholder="FirstName" name="firstname">
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">Last Name</span>
+										<span class="heading-meta" style="color:green">Last Name (necessary to post task, post offer and withdraw credit)</span>
 											<input type="text" value="{{$user->user_profile->last_name}}" class="form-control" placeholder="LastName" name="lastname">
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">Phone Number</span>
+										<span class="heading-meta" style="color:green">Phone Number (necessary to post task, post offer and withdraw credit)</span>
 											<input type="text" value="{{$user->user_profile->phone}}" class="form-control" placeholder="phone number" name="phone">
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">Email</span>
+										<span class="heading-meta" style="color:green">Email (necessary to post task, post offer and withdraw credit)</span>
 											<input type="text" value="{{$user->user_profile->email}}" class="form-control" placeholder="Email" name="email">
 										</div>
 										<div class="form-group">
@@ -76,16 +76,16 @@ colorlib-active
 										<span class="heading-meta">More About You</span>
 											<textarea id="message" cols="30" rows="7" class="form-control" placeholder="tagline" name="tagline">{{$user->user_profile->tagline}}</textarea>
 										</div>
-										<h2 class="colorlib-heading">Payment Method</h2>
+										<h2 class="colorlib-heading">Payment Method (necessary to post task, post offer and withdraw credit)</h2>
 										<div class="form-group">
-										<span class="heading-meta">Bank</span>
+										<span class="heading-meta" style="color:green">Bank</span>
 											<input type="text" value="{{$user->user_profile->bank}}" class="form-control" placeholder="Mandiri,Bca,.." name="bank">
 										</div>
 										<div class="form-group">
-										<span class="heading-meta">No Rekening</span>
-											<input type="text" value="{{$user->user_profile->no_rek}}" class="form-control" placeholder="No rekening anda" name="no_rek">
+										<span class="heading-meta" style="color:green">No Rekening</span>
+											<input type="text" id=#number value="{{$user->user_profile->no_rek}}" class="form-control" placeholder="No rekening anda" name="no_rek">
 										</div>
-										<span class="heading-meta">Nama yang ditransfer</span>
+										<span class="heading-meta" style="color:green">Nama yang ditransfer</span>
 											<input type="text" value="{{$user->user_profile->transfer_name}}" class="form-control" placeholder="Nama pemilik rekening" name="transfer_name">
 											<br>
 										</div>
@@ -137,3 +137,18 @@ colorlib-active
          });  
  </script>
 @endsection
+@section('javascript')
+		<script type="text/javascript">
+		// Select your input element.
+		var number = document.getElementById('number');
+
+		// Listen for input event on numInput.
+		number.onkeydown = function(e) {
+			if(!((e.keyCode > 95 && e.keyCode < 106)
+			|| (e.keyCode > 47 && e.keyCode < 58) 
+			|| e.keyCode == 8)) {
+				return false;
+			}
+		}
+		</script>
+	@endsection

@@ -91,7 +91,9 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-4 offset-md-7">
-                                <button type="submit" class="btn btn-primary">
+                                <input type="checkbox" onchange="document.getElementById('regi').disabled = !this.checked;">agreed with our <a href="/term" target='_blank'>term and condition</a></a>
+                                <Br>
+                                <button type="submit" class="btn btn-primary" id="regi" disabled>
                                     {{ __('Register') }}
                                 </button>
                             </div>

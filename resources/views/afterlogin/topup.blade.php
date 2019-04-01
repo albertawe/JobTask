@@ -7,7 +7,7 @@
 							<span class="heading-meta">Top up your credit</span>
                             @if(\Session::has('alert-failed'))
                                 <div class="alert alert-failed">
-                                    <div>{{Session::get('alert-failed')}}</div>
+                                    <div style="color:red">{{Session::get('alert-failed')}}</div>
                                 </div>
                             @endif
                             @if(\Session::has('alert-success'))
@@ -31,7 +31,7 @@
 											<span class="text-danger">{{ $errors->first('price') }}</span>
 
 										@endif
-											<input type="number" value="" id="number" min="0" oninput="validity.valid||(value=value.replace(/\D+/g, ''))" class="form-control" placeholder="offer your price" name="price">
+											<input type="number" value="" id="number" min="0" max="2000000" oninput="validity.valid||(value=value.replace(/\D+/g, ''))" class="form-control" placeholder="offer your price" name="price">
 										</div>
 										<div class="form-group">
 											<input type="submit" class="btn btn-primary btn-send-message" value="topup">

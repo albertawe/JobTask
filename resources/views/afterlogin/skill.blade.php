@@ -57,9 +57,10 @@ colorlib-active
 											<input type="text" value="{{$user->user_skill->qualification}}" class="form-control" placeholder="any qualification you have (Ex: certification at A, cerfitication at B)" name="qualification">
 										</div>
 										@if($user->user_skill->images)
+										(right click->view image at new tab) for better experience <Br>
 								        @foreach(json_decode($user->user_skill->images, true) as $image)
-                                        <input type="checkbox" name="image[]" value="{{$user->user_skill->images}}" checked>
-                                        <div class="itm" style="width: 300px; 
+                                        <input type="checkbox" name="image[]" value="{{$image}}" checked>
+                                        <div class="itm" style="width: 300px;
                                         height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
                                         "><Br>
                                         <img src="{{ URL::to('/images/quali/'.$image)}}" >

@@ -72,10 +72,14 @@
 												<h2 class="colorlib-heading">{{$user->user_skill->tagline}}</h2>
 											</div>
 											@if($user->user_skill->images)
+											<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
+												<span class="heading-meta">right click->view image at new tab) for better experience</span>
+											</div>
 												@foreach(json_decode($user->user_skill->images, true) as $image)
 													<div class="itm" style="width: 300px; 
 													height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
 													">
+													(
 													<img src="{{ URL::to('/images/quali/'.$image)}}" >
 													</div>
 												@endforeach
@@ -109,3 +113,18 @@
 			@endif
 
 @endsection
+@section('javascript')
+		<script type="text/javascript">
+		// Select your input element.
+		var number = document.getElementById('number');
+
+		// Listen for input event on numInput.
+		number.onkeydown = function(e) {
+			if(!((e.keyCode > 95 && e.keyCode < 106)
+			|| (e.keyCode > 47 && e.keyCode < 58) 
+			|| e.keyCode == 8)) {
+				return false;
+			}
+		}
+		</script>
+	@endsection

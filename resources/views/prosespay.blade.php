@@ -269,11 +269,13 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>Invoice anda untuk topup credit sebesar Rp.{{$nominal}} adalah</p></center>
+                                                                    <center><p>Payment Id anda untuk topup credit sebesar Rp.{{$nominal}} adalah</p></center>
                                                                     <hr>
                                                                     <center><p>{{ $invoice }}</p></center>
                                                                     <hr>
                                                                     <center><p>Silahkan transfer ke rekening kami di bank abc dengan no.rek 123123 dan mencantumkan nomor invoice anda dalam deskripsi</p></center>
+                                                                    <hr>
+                                                                    <center><p>konfirmasi pembayaran anda dengan memilih tombol konfirmasi pada halaman dashboard->detail pada wallet->konfirmasi</p></center>
                                                                 </div>
                                                             </td>
                                                         </tr>

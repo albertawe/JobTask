@@ -269,11 +269,11 @@
                                                         <tbody>
                                                         <tr>
                                                             <td> <div class="container">
-                                                                    <center><p>Pembayaran anda atas request {{$reqq}}. dengan topup id</p></center>
+                                                                    <center><p>Pembayaran anda atas request {{$reqq}}. dengan {{$reqq}} id</p></center>
                                                                     <hr>
                                                                     <center><p>{{ $invoice }}</p></center>
                                                                     <hr>
-                                                                    <center><p>silahkan cek kembali. apabila ada kesalahan silahkan cari kami di jobtaskerindonesia@gmail.com</p></center>
+                                                                    <center><p>telah selesai silahkan cek kembali. apabila ada kesalahan silahkan cari kami di jobtaskerindonesia@gmail.com</p></center>
                                                                 </div>
                                                             </td>
                                                         </tr>

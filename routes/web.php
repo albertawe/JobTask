@@ -21,7 +21,7 @@ else {
         return view('welcome');
     });
 }
-
+Route::get('/term','root\viewjobcontroller@term');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Auth::routes();
 Route::resource('dashboard','\App\Http\Controllers\root\UserProfileController')->middleware('auth');
@@ -52,7 +52,7 @@ Route::get('/email', function () {
 })->middleware('auth');
 Route::post('/sendEmail', 'Email@sendEmail')->middleware('auth');
 Route::post('/payment/{id}','Email@sendInvoice')->middleware('auth');
-Route::post('/deleteoffer/{id}','root\AcceptOfferController@cancel')->middleware('auth');
+Route::get('/deleteoffer/{id}','root\AcceptOfferController@cancel')->middleware('auth');
 Route::post('/posttopup','root\CreditController@topup')->middleware('auth');
 Route::post('/postwithdraw','root\CreditController@withdraw')->middleware('auth');
 Route::get('/withdraw','root\CreditController@indexwithdraw')->middleware('auth');
@@ -64,4 +64,22 @@ Route::get('/generate',"root\Reportmessagecontroller@generate")->middleware('aut
 Route::get('/viewreport/{id}',"root\Reportmessagecontroller@getcons")->middleware('auth');
 Route::post('/viewreport/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
 Route::post('/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
-Route::get('/view/{id}', 'root\tescontroller@index')->middleware('auth');
+Route::get('/showimage/{id}',"Admin\AdminController@showimage")->middleware('auth');
+Route::get('/viewtask/poster_acc/{id}','root\edittaskcontroller@posteracc')->middleware('auth');
+Route::get('/viewtask/worker_acc/{id}','root\edittaskcontroller@workeracc')->middleware('auth');
+Route::get('/viewtask/poster_com/{id}','root\edittaskcontroller@postercom')->middleware('auth');
+Route::get('/viewtask/worker_com/{id}','root\edittaskcontroller@workercom')->middleware('auth');
+Route::get('/viewtask/poster_fail/{id}','root\edittaskcontroller@posterfail')->middleware('auth');
+Route::get('/viewtask/worker_fail/{id}','root\edittaskcontroller@workerfail')->middleware('auth');
+Route::get('/viewtask/acceptjob/{id}','root\acceptoffercontroller@acceptbyworker')->middleware('auth');
+Route::get('/viewtask/rejectjob/{id}','root\acceptoffercontroller@rejectbyworker')->middleware('auth');
+Route::get('/viewtask/reportjob/{id}','root\reporttaskcontroller@index')->middleware('auth');
+Route::post('/reporttask/{id}','root\reporttaskcontroller@uploadevidence')->middleware('auth');
+Route::get('/receiveless/{id}','root\creditcontroller@indexreceiveless')->middleware('auth');
+Route::get('/receivemore/{id}','root\creditcontroller@indexreceivemore')->middleware('auth');
+Route::post('/receiveless/{id}','root\creditcontroller@receiveless')->middleware('auth');
+Route::post('/receivemore/{id}','root\creditcontroller@receivemore')->middleware('auth');
+Route::get('/continueatoffice/{id}','root\reporttaskcontroller@continueatoffice')->middleware('auth');
+Route::get('/evidence/{id}','root\reporttaskcontroller@evidence')->middleware('auth');
+Route::get('/posterright/{id}','root\reporttaskcontroller@posterright')->middleware('auth');
+Route::get('/workerright/{id}','root\reporttaskcontroller@workerright')->middleware('auth');

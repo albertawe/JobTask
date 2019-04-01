@@ -67,6 +67,12 @@ class UserProfileController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'phone' => 'required|min:5',
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+        ]);
         $id = Auth::user()->id;
         $user_profile = UserProfile::find($id);
         $user_profile->first_name = $request->get('firstname');

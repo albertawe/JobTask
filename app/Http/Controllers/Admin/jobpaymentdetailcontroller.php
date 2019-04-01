@@ -16,6 +16,7 @@ class jobpaymentdetailcontroller extends CrudController
 {
     public function sendemail($id) 
     {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         $paymentdetail = PaymentDetail::where('id',$id)->first();
         $paymentdetail->paid_status = 'paid';
         $invid = $paymentdetail->payment_id;
@@ -30,6 +31,18 @@ class jobpaymentdetailcontroller extends CrudController
         elseif($req == 'withdraw'){
             $user->credit->credit = $user->credit->credit - $credit->nominal;
         }
+        if (creditlog::where([
+            ['payment_id','=',$invid],
+            ['status','=','topup revision']
+        ])->exists()) {
+            $credits = creditlog::where([
+                ['payment_id','=',$invid],
+                ['status','=','topup revision']
+            ])->first();
+            $credits->status = 'topup revision completed';
+            $credits->save();
+        }
+        $credit->completed_at = $now;
         $firstname = $user->user_profile->first_name;
         $lastname = $user->user_profile->last_name;
         $credit->status = $req." "."completed";
@@ -55,7 +68,6 @@ class jobpaymentdetailcontroller extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix')  . '/jobpaymentdetail');
         $this->crud->setEntityNameStrings('payment detail', 'payment details');
         $this->crud->setColumns(['payment_id','invoice','paid_status']);
-        $this->crud->addButtonFromView('line', 'sendemail', 'sendemail', 'beginning');
         $this->crud->addField([
         'name' => 'payment_id',
         'label' => 'payment id'

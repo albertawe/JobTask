@@ -8,7 +8,7 @@ use App\jobcategory;
 use App\JobPost;
 use Auth;
 use App\PaymentDetail;
-use Carbon\Carbon;
+use App\user;
 
 class JobPostController extends Controller
 {
@@ -52,9 +52,14 @@ class JobPostController extends Controller
             'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         $id = Auth::user()->id;
+        $user = User::where('id', $id)->with(['user_profile'])->first();
+        if($user->user_profile->phone == null)
+        {
+            return \Redirect::back()->with('alert-failed','informasi nomor hp/telepon anda belum terisi');
+        }
         $job_post = new JobPost;
         $payment = new PaymentDetail;
-        $payment_id = sprintf('P-%07d', JobPost::orderBy('id', 'desc')->first()->id + 1);
+        $payment_id = sprintf('P-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $job_post->payment_id = $payment_id;
         $job_post->title = $request->title;
@@ -94,12 +99,11 @@ class JobPostController extends Controller
      */
     public function show($id)
     {
-        $today = Carbon::now()->format('Y-m-d');
         $taskdetails = JobPost::find($id);
         $time = strtotime($taskdetails->due_date);
         $date = date('Y-m-d',$time);
         $categories = jobcategory::all();
-        return view('afterlogin.edittask',compact('taskdetails','categories','date','today'));
+        return view('afterlogin.edittask',compact('taskdetails','categories','date'));
     }
 
     /**

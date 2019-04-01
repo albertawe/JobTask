@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\jobcategory;
 use App\JobPost;
 use Auth;
+use Mail;
 use App\message;
+use App\reporttask;
 use App\PaymentDetail;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,11 +64,179 @@ class edittaskcontroller extends Controller
 
     public function canceltask($id){
         $job_post = JobPost::where('id',$id)->first();
+        $jobname = $job_post->title;
         message::where('job_id', $id)->update(['status' => 'not active']);
+        offer::where('job_id',$id)->update(['status' => 'not active']);
         $job_post->status = 'canceled';
+        if (is_null($job_post->assigned_tasker_id)){
+            $job_post->save();
+            return redirect()->back()->with('alert-success','Berhasil cancel task');
+        }
+        $job_post->assigned_tasker_id = null;
         $job_post->save();
-        return redirect('dashboard');
-        //return redirect()->back()->with('alert-success','berhasil cancel task');
+        $user = User::where('id', $job_post->assigned_tasker_id)->first();
+        $email = $user->email;
+        try{
+            Mail::send('emailcanceltask', ['job_name' => $jobname], function ($message) use ($email)
+            {
+                $message->subject('poster has canceled his task');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+            return redirect()->back()->with('alert-success','Berhasil cancel task');
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
+    }
+
+    public function posterfail($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $posterid = $job_post->posted_by_id;
+        $workerid = $job_post->assigned_tasker_id;
+        $poster = User::where('id',$posterid)->first();
+        $worker = User::where('id',$workerid)->first();
+        $job_post->poster_acc = 'fail';
+        if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'fail'){
+            $job_post->status = 'not assigned';
+            $job_post->assigned_tasker_id = null;
+        }
+        if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'completed'){
+            $job_post->status = 'reported';
+            $reporttask = new reporttask;
+            $reporttask->job_id = $id;
+            $reporttask->poster_id = $posterid;
+            $reporttask->worker_id = $workerid;
+            $reporttask->poster_status = 'evidence process';
+            $reporttask->worker_status = 'evidence process';
+            $reporttask->report_status = 'evidence process';
+            $reporttask->poster_email = $poster->email;
+            $reporttask->worker_email = $worker->email;
+            $reporttask->save();
+        }
+        $job_post->save();
+        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
+    }
+
+    public function workerfail($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $job_post->worker_acc = 'fail';
+        if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'fail'){
+            $job_post->status = 'not assigned';
+            $job_post->assigned_tasker_id = null;
+        }
+        $job_post->save();
+        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
+    }
+
+    public function posteracc($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $job_post->poster_acc = 'arrived';
+        $job_post->save();
+        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
+    }
+
+    public function workeracc($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $job_post->worker_acc = 'arrived';
+        $job_post->save();
+        return redirect()->back()->with('alert-success','worker telah konfirmasi bahwa worker telah datang');
+    }
+    
+    public function postercom($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $job_post->poster_acc = 'completed';
+        if($job_post->poster_acc == $job_post->worker_acc){
+            $job_post->status = 'finished';
+            $jobname = $job_post->title;
+            $jobid = $job_post->payment_id;
+            $uid = $job->assigned_tasker_id;
+            message::where('job_id', $id)->update(['status' => 'not active']);
+            PaymentDetail::where('Payment_id',$jobid)->update(['paid_status' => 'paid']);
+            $payment = new PaymentDetail;
+            $payment_id = sprintf('TP-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+            $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+            $credit = new creditlog;
+            $credit->status = 'honor';
+            $credit->user_id = $uid;
+            $credit->nominal = $job_post->price;
+            $credit->reason = 'finish a task';
+            $credit->payment_id = $payment_id;
+            $payment->payment_id = $payment_id;
+            $payment->invoice = $invoice;
+            $payment->paid_status = 'paid';
+            $credit->save();
+            $payment->save();
+            $user = User::where('id', $uid)->with(['user_profile'])->first();
+            $current_credit = $user->credit->credit;
+            $increased_credit = $current_credit + $job->price;
+            $user->credit->credit = $increased_credit;
+            $user->credit->save();
+            $email = $user->email;
+            $firstname = $user->user_profile->first_name;
+            $lastname = $user->user_profile->last_name;
+            try{
+                Mail::send('emailfinishjob', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+                {
+                    $message->subject('you have finished your job, checkout your wallet');
+                    $message->from('jobtaskerindonesia@gmail.com');
+                    $message->to($email);
+                });
+            }
+            catch (Exception $e){
+                return redirect()->back();
+            }
+        }
+        $job_post->save();
+        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
+    }
+
+    public function workercom($id){
+        $job_post = JobPost::where('id',$id)->first();
+        $job_post->worker_acc = 'completed';
+        if($job_post->poster_acc == $job_post->worker_acc){
+            $job_post->status = 'finished';
+            $jobname = $job_post->title;
+            $jobid = $job_post->payment_id;
+            $uid = $job->assigned_tasker_id;
+            message::where('job_id', $id)->update(['status' => 'not active']);
+            PaymentDetail::where('Payment_id',$jobid)->update(['paid_status' => 'paid']);
+            $payment = new PaymentDetail;
+            $payment_id = sprintf('TP-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+            $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+            $credit = new creditlog;
+            $credit->status = 'honor';
+            $credit->user_id = $uid;
+            $credit->nominal = $job_post->price;
+            $credit->reason = 'finish a task';
+            $credit->payment_id = $payment_id;
+            $payment->payment_id = $payment_id;
+            $payment->invoice = $invoice;
+            $payment->paid_status = 'paid';
+            $credit->save();
+            $payment->save();
+            $user = User::where('id', $uid)->with(['user_profile'])->first();
+            $current_credit = $user->credit->credit;
+            $increased_credit = $current_credit + $job->price;
+            $user->credit->credit = $increased_credit;
+            $user->credit->save();
+            $email = $user->email;
+            $firstname = $user->user_profile->first_name;
+            $lastname = $user->user_profile->last_name;
+            try{
+                Mail::send('emailfinishjob', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+                {
+                    $message->subject('you have finished your job, checkout your wallet');
+                    $message->from('jobtaskerindonesia@gmail.com');
+                    $message->to($email);
+                });
+            }
+            catch (Exception $e){
+                return redirect()->back();
+            }
+        }
+        $job_post->save();
+        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
     }
 
     public function updatetask(Request $request, $id)

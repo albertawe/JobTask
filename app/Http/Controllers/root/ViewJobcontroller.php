@@ -27,9 +27,9 @@ class ViewJobcontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function term()
     {
-        //
+        return view('term');
     }
 
     /**
@@ -53,15 +53,16 @@ class ViewJobcontroller extends Controller
     {
         $today = Carbon::now()->format('Y-m-d');
         $taskdetails = JobPost::find($id);
+        $deadlinecancel = date("Y-m-d",strtotime($taskdetails->due_date."-2 day"));
         $price = $taskdetails->price;
         $tid = $taskdetails->id;
         $user_id = Auth::user()->id;
         $paymentdetails = PaymentDetail::where('payment_id',$taskdetails->payment_id)->first();
 
-        $offers = offer::where('nego', '<=', $price)->where('job_id',$tid)->where('status','active')->get();
+        $offers = offer::where('job_id',$tid)->where('status','active')->get();
         $uid = strval($user_id);
         // $offers = $offers->where('nego','<=',$price);
-        return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid','today'));
+        return view('afterlogin.viewtask',compact('taskdetails','paymentdetails','offers','uid','today','deadlinecancel'));
     }
 
     /**

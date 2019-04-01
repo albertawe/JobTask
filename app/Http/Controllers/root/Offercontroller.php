@@ -19,7 +19,7 @@ class Offercontroller extends Controller
     public function index()
     {
         $id = Auth::user()->id;
-        $offers = offer::where('user_offer_id',$id)->get();
+        $offers = offer::where('user_offer_id',$id)->where('status','active')->get();
         return view('afterlogin.viewoffer',compact('offers'));
     }
 
@@ -46,6 +46,15 @@ class Offercontroller extends Controller
             'description' => 'required|min:10',
         ]);
         $uid = Auth::user()->id;
+        $user = User::where('id', $uid)->with(['user_profile'])->first();
+        if($user->user_profile->bank == null || $user->user_profile->no_rek == null || $user->user_profile->transfer_name == null)
+        {
+            return \Redirect::back()->with('alert-failed','informasi bank anda belum diisi');
+        }
+        if($user->user_profile->phone == null)
+        {
+            return \Redirect::back()->with('alert-failed','informasi nomor hp/telepon anda belum diisi');
+        }
         $offer = new offer;
         $offer->job_title = $request->get('job_title');
         $offer->job_id = $request->get('job_id');
@@ -53,11 +62,6 @@ class Offercontroller extends Controller
         $offer->status = 'active';
         $offer->description = $request->get('description');
         $offer->user_offer_id = $uid;
-        $user = User::where('id', $uid)->with(['user_profile'])->first();
-        if($user->user_profile->bank == null || $user->user_profile->no_rek == null || $user->user_profile->transfer_name == null)
-        {
-            return \Redirect::back()->with('viewtask')->with('alert-failed','informasi bank anda belum diisi');
-        }
         $offer->save();
         return \Redirect::back()->with('viewtask')->with('alert-success','Berhasil Kirim Tawaran');
     }
