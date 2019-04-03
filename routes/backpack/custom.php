@@ -5,7 +5,7 @@
 // --------------------------
 // This route file is loaded automatically by Backpack\Base.
 // Routes you generate using Backpack\Generators will be placed here.
-Route::get('/admin/creditlog/search/{id}/sendemail', 'App\Http\Controllers\Admin\jobpaymentdetailcontroller@sendemail');
+Route::get('/admin/creditlog/search/{id}/sendemail', 'App\Http\Controllers\Admin\creditlogcontroller@sendemail');
 Route::get('/admin/jobpaymentdetail/search/{id}/receiveless', 'App\Http\Controllers\Admin\jobpaymentdetailcontroller@receiveless');
 Route::get('/admin/jobpaymentdetail/search/{id}/receivemore', 'App\Http\Controllers\Admin\jobpaymentdetailcontroller@receivemore');
 Route::get('/admin/reportmessage/search/{id}/openchat', 'App\Http\Controllers\Admin\reportmessagecontroller@openchat');

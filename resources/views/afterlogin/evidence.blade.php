@@ -23,7 +23,6 @@
                                                         <div class="itm" style="width: 300px; 
                                                             height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
                                                             ">
-                                                            (
                                                             <img src="{{ URL::to('/images/report/'.$image)}}" >
                                                         </div>
                                                     @endforeach
@@ -43,16 +42,16 @@
                                                 <div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
                                                 <Br>
                                                     <span class="heading-meta">Worker Explaination</span>
-                                                    <h2 class="colorlib-heading">{{$report->Worker_message}}</h2>
+                                                    <h2 class="colorlib-heading">{{$report->worker_message}}</h2>
                                                 </div>
                                                 <div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
                                                     <span class="heading-meta">right click->view image at new tab) for better experience</span>
                                                 </div>
-                                                    @foreach(json_decode($report->Worker_image, true) as $image)
+                                                    @foreach(json_decode($report->worker_image, true) as $image)
                                                         <div class="itm" style="width: 300px; 
                                                             height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
                                                             ">
-                                                            (
+                                                            
                                                             <img src="{{ URL::to('/images/report/'.$image)}}" >
                                                         </div>
                                                     @endforeach

@@ -33,7 +33,7 @@ class reportmessagecontroller extends Controller
         $message = new reportmessage;
         $ticket = sprintf('T-%07d', reportmessage::orderBy('id', 'desc')->first()->id + 1);
         $message->ticket = $ticket;
-        $message = $request->title;
+        $message->title = $request->title;
         $message->user_id = $uid;
         $message->status = 'active';
         $user = User::where('id', $uid)->first();

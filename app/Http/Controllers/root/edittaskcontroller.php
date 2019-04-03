@@ -7,8 +7,12 @@ use App\Http\Controllers\Controller;
 use App\jobcategory;
 use App\JobPost;
 use Auth;
+use App\creditlog;
+use App\offer;
 use Mail;
+use App\User;
 use App\message;
+use Carbon\Carbon;
 use App\reporttask;
 use App\PaymentDetail;
 use Illuminate\Support\Facades\Storage;
@@ -67,6 +71,11 @@ class edittaskcontroller extends Controller
         $jobname = $job_post->title;
         message::where('job_id', $id)->update(['status' => 'not active']);
         offer::where('job_id',$id)->update(['status' => 'not active']);
+        if($job_post->status == 'assigned'){
+        $poster = User::where('id',$job_post->posted_by_id)->with(['credit'])->first();
+        $poster->credit->credit = $poster->credit->credit + $job_post->price;
+        $poster->credit->save();
+        }
         $job_post->status = 'canceled';
         if (is_null($job_post->assigned_tasker_id)){
             $job_post->save();
@@ -97,7 +106,9 @@ class edittaskcontroller extends Controller
         $poster = User::where('id',$posterid)->first();
         $worker = User::where('id',$workerid)->first();
         $job_post->poster_acc = 'fail';
+        $job_post->save();
         if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'fail'){
+            offer::where('job_id',$id)->update(['status' => 'not active']);
             $job_post->status = 'not assigned';
             $job_post->assigned_tasker_id = null;
         }
@@ -113,20 +124,59 @@ class edittaskcontroller extends Controller
             $reporttask->poster_email = $poster->email;
             $reporttask->worker_email = $worker->email;
             $reporttask->save();
+            $job_post->save();
+            return redirect()->back()->with('alert-success','pekerjaan ini telah dilanjutkan menjadi tahap pelaporan');
         }
         $job_post->save();
         return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
     }
 
     public function workerfail($id){
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         $job_post = JobPost::where('id',$id)->first();
         $job_post->worker_acc = 'fail';
+        $jobname = $job_post->title;
+        $posterid = $job_post->posted_by_id;
         if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'fail'){
-            $job_post->status = 'not assigned';
-            $job_post->assigned_tasker_id = null;
+            offer::where('job_id',$id)->update(['status' => 'not active']);
+            $job_post->status = 'canceled';
         }
+        $user = User::where('id', $posterid)->with(['user_profile','credit'])->first();
+        $current_credit = $user->credit->credit;
+        $increased_credit = $current_credit + $job_post->price;
+        $user->credit->credit = $increased_credit;
+        $payment = new PaymentDetail;
+        $payment_id = sprintf('TP-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+        $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
+        $credit = new creditlog;
+        $credit->status = 'refund';
+        $credit->user_id = $posterid;
+        $credit->nominal = $job_post->price;
+        $credit->completed_at = $now;
+        $credit->reason = 'task failed to be done';
+        $credit->payment_id = $payment_id;
+        $payment->payment_id = $payment_id;
+        $payment->invoice = $invoice;
+        $payment->paid_status = 'paid';
+        $credit->save();
+        $payment->save();
+        $user->credit->save();
+        $email = $user->email;
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
         $job_post->save();
-        return redirect()->back()->with('alert-success','poster telah konfirmasi bahwa worker telah datang');
+        try{
+            Mail::send('emailtaskfailed', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+            {
+                $message->subject('it seems your task failed to be done');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
+        return redirect()->back()->with('alert-success','berhasil mengkonfirmasi hasil pekerjaan');
     }
 
     public function posteracc($id){
@@ -144,13 +194,14 @@ class edittaskcontroller extends Controller
     }
     
     public function postercom($id){
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         $job_post = JobPost::where('id',$id)->first();
         $job_post->poster_acc = 'completed';
         if($job_post->poster_acc == $job_post->worker_acc){
             $job_post->status = 'finished';
             $jobname = $job_post->title;
             $jobid = $job_post->payment_id;
-            $uid = $job->assigned_tasker_id;
+            $uid = $job_post->assigned_tasker_id;
             message::where('job_id', $id)->update(['status' => 'not active']);
             PaymentDetail::where('Payment_id',$jobid)->update(['paid_status' => 'paid']);
             $payment = new PaymentDetail;
@@ -159,6 +210,7 @@ class edittaskcontroller extends Controller
             $credit = new creditlog;
             $credit->status = 'honor';
             $credit->user_id = $uid;
+            $credit->completed_at = $now;
             $credit->nominal = $job_post->price;
             $credit->reason = 'finish a task';
             $credit->payment_id = $payment_id;
@@ -167,9 +219,9 @@ class edittaskcontroller extends Controller
             $payment->paid_status = 'paid';
             $credit->save();
             $payment->save();
-            $user = User::where('id', $uid)->with(['user_profile'])->first();
+            $user = User::where('id', $uid)->with(['user_profile','credit'])->first();
             $current_credit = $user->credit->credit;
-            $increased_credit = $current_credit + $job->price;
+            $increased_credit = $current_credit + $job_post->price;
             $user->credit->credit = $increased_credit;
             $user->credit->save();
             $email = $user->email;
@@ -192,13 +244,33 @@ class edittaskcontroller extends Controller
     }
 
     public function workercom($id){
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         $job_post = JobPost::where('id',$id)->first();
         $job_post->worker_acc = 'completed';
+        if($job_post->poster_acc == 'fail' && $job_post->worker_acc == 'completed'){
+        $posterid = $job_post->posted_by_id;
+        $workerid = $job_post->assigned_tasker_id;
+        $poster = User::where('id',$posterid)->first();
+        $worker = User::where('id',$workerid)->first();
+            $job_post->status = 'reported';
+            $reporttask = new reporttask;
+            $reporttask->job_id = $id;
+            $reporttask->poster_id = $posterid;
+            $reporttask->worker_id = $workerid;
+            $reporttask->poster_status = 'evidence process';
+            $reporttask->worker_status = 'evidence process';
+            $reporttask->report_status = 'evidence process';
+            $reporttask->poster_email = $poster->email;
+            $reporttask->worker_email = $worker->email;
+            $reporttask->save();
+            $job_post->save();
+            return redirect()->back()->with('alert-success','pekerjaan ini telah dilanjutkan menjadi tahap pelaporan');
+        }
         if($job_post->poster_acc == $job_post->worker_acc){
             $job_post->status = 'finished';
             $jobname = $job_post->title;
             $jobid = $job_post->payment_id;
-            $uid = $job->assigned_tasker_id;
+            $uid = $job_post->assigned_tasker_id;
             message::where('job_id', $id)->update(['status' => 'not active']);
             PaymentDetail::where('Payment_id',$jobid)->update(['paid_status' => 'paid']);
             $payment = new PaymentDetail;
@@ -207,6 +279,7 @@ class edittaskcontroller extends Controller
             $credit = new creditlog;
             $credit->status = 'honor';
             $credit->user_id = $uid;
+            $credit->completed_at = $now;
             $credit->nominal = $job_post->price;
             $credit->reason = 'finish a task';
             $credit->payment_id = $payment_id;
@@ -215,9 +288,9 @@ class edittaskcontroller extends Controller
             $payment->paid_status = 'paid';
             $credit->save();
             $payment->save();
-            $user = User::where('id', $uid)->with(['user_profile'])->first();
+            $user = User::where('id', $uid)->with(['user_profile','credit'])->first();
             $current_credit = $user->credit->credit;
-            $increased_credit = $current_credit + $job->price;
+            $increased_credit = $current_credit + $job_post->price;
             $user->credit->credit = $increased_credit;
             $user->credit->save();
             $email = $user->email;

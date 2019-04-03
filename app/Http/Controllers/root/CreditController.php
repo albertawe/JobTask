@@ -5,6 +5,7 @@ use Mail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\creditlog;
+use App\creditlogconfirm;
 use App\PaymentDetail;
 use App\User;
 use Carbon\Carbon;
@@ -33,6 +34,7 @@ class CreditController extends Controller
         $credit->reason = 'paid less than requested';
         $credit->payment_id = $credits->payment_id;
         $payment->payment_id = $credits->payment_id;
+        $payment_id = $payment->payment_id;
         $payment->invoice = $invoice;
         $payment->paid_status = 'topup pending';
         $credit->save();
@@ -54,7 +56,7 @@ class CreditController extends Controller
         return redirect()->back();
     }
 
-    public function receivemore($id){
+    public function receivemore(Request $request,$id){
         $this->validate($request, [
             'price' => 'required'
         ]);
@@ -87,6 +89,20 @@ class CreditController extends Controller
         $credits->save();
         $credit->save();
         $payment->save();
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
+        $email = $user->email;
+        try{
+            Mail::send('emailreceivemore', ['first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $pid], function ($message) use ($email)
+            {
+                $message->subject('silahkan melakukan pembayaran atas request topup anda');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+        }
+        catch (Exception $e){
+            return response (['status' => false,'errors' => $e->getMessage()]);
+        }
         return redirect()->back();
     }
 
@@ -173,9 +189,9 @@ class CreditController extends Controller
         $payment_id = sprintf('WD-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $invoice = sprintf('INV-%07d', PaymentDetail::orderBy('id', 'desc')->first()->id + 1);
         $nominal = $request->price;
-        $credit->BankName = $user->userprofile->bank;
-        $credit->OwnerName = $user->userprofile->transfer_name;
-        $credit->RekNo = $user->userprofile->no_rek;
+        $credit->BankName = $user->user_profile->bank;
+        $credit->OwnerName = $user->user_profile->transfer_name;
+        $credit->RekNo = $user->user_profile->no_rek;
         $credit->status = 'withdraw';
         $credit->user_id = $uid;
         $credit->nominal = $nominal;
@@ -214,22 +230,24 @@ class CreditController extends Controller
         return back()->with('alert-success','Request withdraw telah berhasil diajukan, silahkan cek email anda');
     }
 
-    public function confirmation($id){
+    public function confirmation(Request $request, $id){
+        $this->validate($request, [
+            'image' => 'required'
+        ]);
         $now = Carbon::now()->format('Y-m-d H:i:s');
         $uid = Auth::user()->id;
         $payment = PaymentDetail::where('payment_id',$id)->first();
-        $credit = creditlog::where('payment_id',$id)->first();
-        $credit->confirmation_at = $now;
-        if($request->image != null){
-            $name=$request->image->getClientOriginalName();
-            if(\File::exists(public_path().'/images/topup/'.$name)){
-                $name = 'topup/'.str_random(5).$id.".jpg";
+        $credit = creditlogconfirm::where('payment_id',$id)->first();
+        $credit->confirmation_at = $now; 
+            $name = '/topup/'.$request->image->getClientOriginalName();
+            if(\File::exists(public_path().'/images'.$name)){
+                $name = '/topup/'.str_random(5).$id.".jpg";
             }
             $request->image->move(public_path().'/images/topup', $name);  
-            $credit->image = $name;
-        }  
+            $credit->image = $name; 
         $credit->save();
         $invoice = $payment->invoice;
+        $pid = $payment->payment_id;
         $user = User::where('id', $uid)->with(['user_profile'])->first();
         $firstname = $user->user_profile->first_name;
         $lastname = $user->user_profile->last_name;
@@ -246,7 +264,56 @@ class CreditController extends Controller
             return response (['status' => false,'errors' => $e->getMessage()]);
         }
         try{
-            Mail::send('prosespayadmin', ['invoice' => $invoice], function ($message)
+            Mail::send('prosespayadmin', ['invoice' => $pid], function ($message)
+            {
+                $message->subject('request pengecekan pembayaran');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to('jobtaskerindonesia@gmail.com');
+            });
+        }
+        catch (Exception $e){
+            return response (['status' => false,'errors' => $e->getMessage()]);
+        }
+        return back()->with('alert-success','konfirmasi pembayaran anda telah kami terima');
+    }
+    public function confirmationrevision(Request $request, $id){
+        $this->validate($request, [
+            'image' => 'required'
+        ]);
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        $uid = Auth::user()->id;
+        $payment = PaymentDetail::where('payment_id',$id)->first();
+        $credit = creditlogconfirm::where([
+            ['payment_id','=',$id],
+            ['status','=','topup revision']
+            ])->first();
+        $credit->confirmation_at = $now; 
+            $name = '/topup/'.$request->image->getClientOriginalName();
+            if(\File::exists(public_path().'/images'.$name)){
+                $name = '/topup/'.str_random(5).$id.".jpg";
+            }
+            $request->image->move(public_path().'/images/topup', $name);  
+            $credit->image = $name; 
+        $credit->save();
+        $invoice = $payment->invoice;
+        $pid = $payment->payment_id;
+        $user = User::where('id', $uid)->with(['user_profile'])->first();
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
+        $email = $user->email;
+        try{
+            Mail::send('konfirmasi', ['first_name' => $firstname, 'last_name' => $lastname ,'invoice' => $invoice], function ($message) use ($email)
+            {
+                $message->subject('pembayaran anda sedang diproses oleh admin!');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+        }
+        catch (Exception $e){
+            return response (['status' => false,'errors' => $e->getMessage()]);
+        }
+        try{
+            Mail::send('prosespayadmin', ['invoice' => $pid], function ($message)
             {
                 $message->subject('request pengecekan pembayaran');
                 $message->from('jobtaskerindonesia@gmail.com');

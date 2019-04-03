@@ -9,7 +9,7 @@ class creditlog extends Model
 {
     use CrudTrait;
     protected $table = 'creditlogs';
-    protected $fillable = ['user_id','payment_id','status','nominal','reason','created_at','confirmation_at','completed_at','image','BankName','OwnerName','RekNo'];
+    protected $fillable = ['user_id','image','payment_id','status','nominal','reason','created_at','confirmation_at','completed_at','BankName','OwnerName','RekNo'];
     public function user(){
         return $this->belongsTo('App\User');
     }

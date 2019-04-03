@@ -17,7 +17,7 @@ colorlib-active
 							<div class="row">
 								<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
 								<span class="heading-meta">Upload the picture and explain Evidence of your claim </span>
-									<form method="post" action="/reporttask/{{$reportid}}" enctype="multipart/form-data">
+									<form method="post" action="/reporttask/{{$reporttask->id}}" enctype="multipart/form-data">
 									@csrf
                                     <div class="form-group">
 								        <span class="heading-meta">upload the picture of evidence</span>

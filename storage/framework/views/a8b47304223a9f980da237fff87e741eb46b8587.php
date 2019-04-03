@@ -38,6 +38,8 @@ colorlib-active
 									Description: <small><?php echo e($job->job_description); ?></small>
 									<?php if($job->status == 'canceled'): ?>
 										<small style="color:red">this task has been canceled</small>
+									<?php elseif($job->status == 'finished'): ?>
+										<small style="color:green">this task finished</small>
 									<?php elseif($job->due_date < $today && $job->status == 'not assigned'): ?>
 									<small style="color:red">this task has past its due date</small>
 									<?php endif; ?>
@@ -63,7 +65,14 @@ colorlib-active
 									<span>Due Date: <small><?php echo e($jobb->due_date); ?></small></br>
 									Category: <small><?php echo e($jobb->job_category); ?></small></br>
 									Type: <small><?php echo e($jobb->job_type); ?></small></br>
-									Description: <small><?php echo e($jobb->job_description); ?></small></span>
+									Description: <small><?php echo e($jobb->job_description); ?></small>
+									<?php if($jobb->status == 'finished'): ?>
+										<small style="color:green">this task finished</small>
+									<?php elseif($jobb->status == 'canceled'): ?>
+										<small style="color:red">this task has been canceled</small>
+									<?php endif; ?>
+									</span>
+									
 								</div>
                         </div>
 				</div>

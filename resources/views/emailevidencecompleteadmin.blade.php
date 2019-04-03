@@ -260,7 +260,6 @@
                             <table border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-                                        <p>Hi {{ $first_name }}  {{ $last_name }}</p>
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tbody>
                                             <tr>

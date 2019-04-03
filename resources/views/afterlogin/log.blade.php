@@ -120,8 +120,11 @@
 <table class="container">
 	<thead>
 		<tr>
-			<th><h1>Payment_id</h1></th>
+			<th><h1>Payment id</h1></th>
 			<th><h1>status</h1></th>
+            <th><h1>created at</h1></th>
+            <th><h1>confirmation at</h1></th>
+            <th><h1>completed at</h1></th>
 			<th><h1>nominal</h1></th>
 			<th><h1>reason</h1></th>
             <th><h1>action</h1></th>
@@ -137,6 +140,15 @@
         {{$log->status}}
         </td>
         <td>
+        {{$log->created_at}}
+        </td>
+        <td>
+        {{$log->confirmation_at}}
+        </td>
+        <td>
+        {{$log->completed_at}}
+        </td>
+        <td>
         {{$log->nominal}}
         </td>
         <td>
@@ -144,20 +156,43 @@
         </td>
         <td>
         @if($log->status == 'topup')
-        <form method="POST" action="confirmation/{{$log->payment_id}}">
+        <form method="POST" action="confirmation/{{$log->payment_id}}" enctype="multipart/form-data">
 			@csrf
                 <div class="form-group">
-					<span class="heading-meta">Upload bukti pembayaran</span>
-				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image">
+					<span class="heading-meta">Upload bukti pembayaran</span><Br>
+                    @if ($errors->has('image'))
+						<span class="text-danger">{{ $errors->first('image') }}</span>
+					@endif
+				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image" >
 				</div>
 				<div class="form-group">
+                <br>
+					<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
+				</div>
+		</form>
+        @elseif($log->status == 'topup revision')
+        <form method="POST" action="confirmationrevision/{{$log->payment_id}}" enctype="multipart/form-data">
+			@csrf
+                <div class="form-group">
+					<span class="heading-meta">Upload bukti pembayaran</span><Br>
+                    @if ($errors->has('image'))
+						<span class="text-danger">{{ $errors->first('image') }}</span>
+					@endif
+				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image" >
+				</div>
+				<div class="form-group">
+                <br>
 					<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
 				</div>
 		</form>
         @elseif($log->status == 'withdraw')
         processing
-        @else
-        -
+        @elseif($log->status == 'withdraw completed')
+        <img src="{{ URL::to('/images'.$log->image)}}" style="height:100px;width:100px">
+        @elseif($log->status == 'topup completed')
+        <img src="{{ URL::to('/images'.$log->image)}}" style="height:100px;width:100px">
+        @elseif($log->status == 'topup revision completed')
+        <img src="{{ URL::to('/images'.$log->image)}}" style="height:100px;width:100px">
         @endif
         </td>
     </tr>

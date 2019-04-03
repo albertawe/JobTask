@@ -89,7 +89,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-4 offset-md-7">
-                                <input type="checkbox" onchange="document.getElementById('regi').disabled = !this.checked;">agreed with our <a href="/term" target='_blank'>term and condition</a></a>
+                                <input type="checkbox" onchange="document.getElementById('regi').disabled = !this.checked;">agreed with our <a style="color:blue" data-toggle="modal" data-target="#myModal">term and condition</a></a>
                                 <Br>
                                 <button type="submit" class="btn btn-primary" id="regi" disabled>
                                     <?php echo e(__('Register')); ?>
@@ -97,7 +97,28 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group row offset-md-8">
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+                        
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Our term and conditions</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Some text in the modal.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                            
+                        </div>
+                        </div>
+                                                <div class="form-group row offset-md-8">
                             <a class="btn btn-link" href="<?php echo e(route('login')); ?>">
                                 Already registered?
                             </a>

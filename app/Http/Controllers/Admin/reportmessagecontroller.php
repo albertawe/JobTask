@@ -19,7 +19,7 @@ class reportmessagecontroller extends CrudController
         $this->crud->setModel('App\reportmessage');
         $this->crud->setRoute(config('backpack.base.route_prefix')  . '/reportmessage');
         $this->crud->setEntityNameStrings('report message', 'report messages');
-        $this->crud->setColumns(['ticket','user_id','status']);
+        $this->crud->setColumns(['ticket','title','user_id','status']);
         $this->crud->addButtonFromView('line', 'openchat', 'openchat', 'beginning');
         $this->crud->addField([
         'name' => 'ticket',

@@ -7,16 +7,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TagCrudRequest as StoreRequest;
 use App\Http\Requests\TagCrudRequest as UpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\PaymentDetail;
+use App\user;
+use App\creditlog;
+use Mail;
+use Carbon\Carbon;
 
 class creditlogcontroller extends CrudController
 {
     public function sendemail($id) 
     {
         $now = Carbon::now()->format('Y-m-d H:i:s');
-        $paymentdetail = PaymentDetail::where('id',$id)->first();
+        $credit = creditlog::where('id',$id)->first();
+        $invid = $credit->payment_id;
+        $paymentdetail = PaymentDetail::where('payment_id',$invid)->first();
         $paymentdetail->paid_status = 'paid';
-        $invid = $paymentdetail->payment_id;
-        $credit = creditlog::where('payment_id',$invid)->first();
         $uid = $credit->user_id;
         $user = User::where('id', $uid)->with(['user_profile','credit'])->first();
         $email = $user->email;
@@ -36,6 +41,7 @@ class creditlogcontroller extends CrudController
                 ['status','=','topup revision']
             ])->first();
             $credits->status = 'topup revision completed';
+            $credits->completed_at = $now;
             $credits->save();
         }
         $credit->completed_at = $now;

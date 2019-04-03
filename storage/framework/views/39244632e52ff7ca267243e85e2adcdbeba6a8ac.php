@@ -120,8 +120,11 @@
 <table class="container">
 	<thead>
 		<tr>
-			<th><h1>Payment_id</h1></th>
+			<th><h1>Payment id</h1></th>
 			<th><h1>status</h1></th>
+            <th><h1>created at</h1></th>
+            <th><h1>confirmation at</h1></th>
+            <th><h1>completed at</h1></th>
 			<th><h1>nominal</h1></th>
 			<th><h1>reason</h1></th>
             <th><h1>action</h1></th>
@@ -139,6 +142,18 @@
 
         </td>
         <td>
+        <?php echo e($log->created_at); ?>
+
+        </td>
+        <td>
+        <?php echo e($log->confirmation_at); ?>
+
+        </td>
+        <td>
+        <?php echo e($log->completed_at); ?>
+
+        </td>
+        <td>
         <?php echo e($log->nominal); ?>
 
         </td>
@@ -148,16 +163,43 @@
         </td>
         <td>
         <?php if($log->status == 'topup'): ?>
-        <form method="POST" action="confirmation/<?php echo e($log->payment_id); ?>">
+        <form method="POST" action="confirmation/<?php echo e($log->payment_id); ?>" enctype="multipart/form-data">
 			<?php echo csrf_field(); ?>
+                <div class="form-group">
+					<span class="heading-meta">Upload bukti pembayaran</span><Br>
+                    <?php if($errors->has('image')): ?>
+						<span class="text-danger"><?php echo e($errors->first('image')); ?></span>
+					<?php endif; ?>
+				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image" >
+				</div>
 				<div class="form-group">
+                <br>
+					<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
+				</div>
+		</form>
+        <?php elseif($log->status == 'topup revision'): ?>
+        <form method="POST" action="confirmationrevision/<?php echo e($log->payment_id); ?>" enctype="multipart/form-data">
+			<?php echo csrf_field(); ?>
+                <div class="form-group">
+					<span class="heading-meta">Upload bukti pembayaran</span><Br>
+                    <?php if($errors->has('image')): ?>
+						<span class="text-danger"><?php echo e($errors->first('image')); ?></span>
+					<?php endif; ?>
+				    <input type="file" value="" class="form-control" placeholder="UploadImage" name="image" >
+				</div>
+				<div class="form-group">
+                <br>
 					<input type="submit" class="btn btn-primary btn-send-message" value="confirm your payment">
 				</div>
 		</form>
         <?php elseif($log->status == 'withdraw'): ?>
         processing
-        <?php else: ?>
-        -
+        <?php elseif($log->status == 'withdraw completed'): ?>
+        <img src="<?php echo e(URL::to('/images'.$log->image)); ?>" style="height:100px;width:100px">
+        <?php elseif($log->status == 'topup completed'): ?>
+        <img src="<?php echo e(URL::to('/images'.$log->image)); ?>" style="height:100px;width:100px">
+        <?php elseif($log->status == 'topup revision completed'): ?>
+        <img src="<?php echo e(URL::to('/images'.$log->image)); ?>" style="height:100px;width:100px">
         <?php endif; ?>
         </td>
     </tr>

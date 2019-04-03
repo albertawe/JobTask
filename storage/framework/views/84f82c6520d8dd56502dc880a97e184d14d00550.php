@@ -41,7 +41,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" <?php echo e(old('remember') ? 'checked' : ''); ?>>
 
-                                    <label class="form-check-label" for="remember">
+                                    <label class="form-check-label" for="remember" style="margin-left:20px;margin-top:3px;">
                                         <?php echo e(__('Remember Me')); ?>
 
                                     </label>

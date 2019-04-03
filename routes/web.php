@@ -58,9 +58,10 @@ Route::post('/postwithdraw','root\CreditController@withdraw')->middleware('auth'
 Route::get('/withdraw','root\CreditController@indexwithdraw')->middleware('auth');
 Route::get('/topup','root\CreditController@indextopup')->middleware('auth');
 Route::post('/confirmation/{id}','root\CreditController@confirmation')->middleware('auth');
+Route::post('/confirmationrevision/{id}','root\CreditController@confirmationrevision')->middleware('auth');
 Route::get('/openchat/{id}',"root\Reportmessagecontroller@openchatadmin")->middleware('auth');
 Route::get('/reportmessage',"root\Reportmessagecontroller@indexuser")->middleware('auth');
-Route::get('/generate',"root\Reportmessagecontroller@generate")->middleware('auth');
+Route::post('/generate',"root\Reportmessagecontroller@generate")->middleware('auth');
 Route::get('/viewreport/{id}',"root\Reportmessagecontroller@getcons")->middleware('auth');
 Route::post('/viewreport/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
 Route::post('/report_message/{id}', "root\Reportmessagecontroller@post_message")->middleware('auth');
@@ -83,3 +84,4 @@ Route::get('/continueatoffice/{id}','root\reporttaskcontroller@continueatoffice'
 Route::get('/evidence/{id}','root\reporttaskcontroller@evidence')->middleware('auth');
 Route::get('/posterright/{id}','root\reporttaskcontroller@posterright')->middleware('auth');
 Route::get('/workerright/{id}','root\reporttaskcontroller@workerright')->middleware('auth');
+Route::get('/viewtask/cancelaccept/{id}','root\acceptoffercontroller@cancelaccept')->middleware('auth');

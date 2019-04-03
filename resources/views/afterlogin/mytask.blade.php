@@ -39,6 +39,8 @@ colorlib-active
 									Description: <small>{{$job->job_description}}</small>
 									@if($job->status == 'canceled')
 										<small style="color:red">this task has been canceled</small>
+									@elseif($job->status == 'finished')
+										<small style="color:green">this task finished</small>
 									@elseif($job->due_date < $today && $job->status == 'not assigned')
 									<small style="color:red">this task has past its due date</small>
 									@endif
@@ -64,7 +66,14 @@ colorlib-active
 									<span>Due Date: <small>{{$jobb->due_date}}</small></br>
 									Category: <small>{{$jobb->job_category}}</small></br>
 									Type: <small>{{$jobb->job_type}}</small></br>
-									Description: <small>{{$jobb->job_description}}</small></span>
+									Description: <small>{{$jobb->job_description}}</small>
+									@if($jobb->status == 'finished')
+										<small style="color:green">this task finished</small>
+									@elseif($jobb->status == 'canceled')
+										<small style="color:red">this task has been canceled</small>
+									@endif
+									</span>
+									
 								</div>
                         </div>
 				</div>

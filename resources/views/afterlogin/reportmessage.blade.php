@@ -7,7 +7,7 @@
         <div class="colorlib-narrow-content">
         <div class="row">
 		<div class="col-md-10 col-md-offset-1 col-md-pull-1 animate-box" data-animate-effect="fadeInLeft">
-			<form method="post" action="{{ action('root/reportmessagecontroller@generate') }}" enctype="multipart/form-data">
+			<form method="post" action="{{ action('root\Reportmessagecontroller@generate') }}" enctype="multipart/form-data">
                 @csrf
 				<span class="heading-meta"><h5>let us know what's your problem and generate your waiting ticket</h5></span>
 					<div class="form-group">
@@ -28,8 +28,8 @@
                     <div class="col-md-10 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
                         <div class="blog-entry">
                            <div class="desc">
-                                <h3><a href="viewreport/{{$mes->id}}" class="col-md-8">
-                                Chatroom ticket number {{$mes->title}}</a></h3>
+                                <h3><a href="viewreport/{{$mes->id}}">
+                                Title: {{$mes->title}}</a></h3>
                                 <span>Ticket number: <small>{{$mes->ticket}}</small></span>
                             </div>
                         </div>
@@ -42,8 +42,8 @@
                     <div class="col-md-10 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
                         <div class="blog-entry">
                            <div class="desc">
-                           <h3 class="col-md-8">
-                                Chatroom ticket number {{$mes->title}}</h3>
+                           <h3>
+                           Title: {{$mes->title}}</h3>
                                 <span>Ticket number: <small>{{$mes->ticket}}</small></span>
                             </div>
                         </div>

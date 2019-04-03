@@ -12,6 +12,8 @@ use Auth;
 use App\creditlog;
 use App\PaymentDetail;
 use App\message;
+use Carbon\Carbon;
+
 class AcceptOfferController extends Controller
 {
 
@@ -19,6 +21,11 @@ class AcceptOfferController extends Controller
         $today = Carbon::now()->format('Y-m-d');
         $newDate = date("Y.m.d",strtotime($today."+2 day"));
         $offer = offer::where('id',$offer_id)->first();
+        $uid = Auth::user()->id;
+        $poster = User::where('id', $uid)->with(['credit'])->first();
+        if ($poster->credit->credit < $offer->nego){
+            return back()->with('alert-failed','Credit tidak cukup untuk memilih tawaran tersebut');
+        }
         $user_offer_id = $offer->user_offer_id;
         $job_id = $offer->job_id;
         $job = JobPost::where('id',$job_id)->first();
@@ -44,7 +51,7 @@ class AcceptOfferController extends Controller
         catch (Exception $e){
             return redirect()->back();
         }
-        return redirect('mytask')->with('alert-success','Berhasil menerima tawaran, menunggu kabar dari worker');
+        //return redirect('mytask')->with('alert-success','Berhasil menerima tawaran, menunggu kabar dari worker');
     }
 
     public function rejectbyworker($jobid){
@@ -77,18 +84,49 @@ class AcceptOfferController extends Controller
         return redirect()->back();
     }
 
-    public function acceptbyworker($jobid){
+    public function cancelaccept($jobid){
         $job = JobPost::where('id',$jobid)->first();
         $offer_id = $job->offer_id;
         $offer = offer::where('id',$offer_id)->first();
         $offer->deadline = null;
-        $offer->status = 'chosen';
+        $offer->status = 'not active';
+        $jobname = $job->title;
+        $job->assigned_tasker_id = null;
+        $job->offer_id = null;
+        $job->status = 'not assigned';
         $offer->save();
+        $job->save();
+        $id = $job->posted_by_id;
+        $user = User::where('id', $id)->with(['user_profile','credit'])->first();
+        $firstname = $user->user_profile->first_name;
+        $lastname = $user->user_profile->last_name;
+        $email = $user->email;
+        try{
+            Mail::send('emailoffrejected', ['job_name' => $jobname, 'first_name' => $firstname, 'last_name' => $lastname ], function ($message) use ($email)
+            {
+                $message->subject('worker are not available for this job, please choose other offer');
+                $message->from('jobtaskerindonesia@gmail.com');
+                $message->to($email);
+            });
+        }
+        catch (Exception $e){
+            return redirect()->back();
+        }
+        return redirect()->back();
+    }
+
+    public function acceptbyworker($jobid){
+        $job = JobPost::where('id',$jobid)->first();
+        $offer_id = $job->offer_id;
+        $offer = offer::where('id',$offer_id)->first();
         $id = $job->posted_by_id;
         $user = User::where('id', $id)->with(['user_profile','credit'])->first();
         if ($user->credit->credit < $offer->nego){
-            return back()->with('alert-failed','Credit tidak cukup untuk memilih tawaran tersebut');
+            return back()->with('alert-failed','Credit poster tidak cukup untuk tawaran anda');
         }
+        $offer->deadline = null;
+        $offer->status = 'chosen';
+        $offer->save();
         $current_credit = $user->credit->credit;
         $deducted_credit = $current_credit - $offer->nego;
         $user->credit->credit = $deducted_credit;

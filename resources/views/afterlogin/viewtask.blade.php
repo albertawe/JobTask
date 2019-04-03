@@ -1,25 +1,27 @@
 @extends('/layouts/template')
 @section('content')
-		<div class="colorlib-contact">
-			<div class="colorlib-narrow-content">
-				<div class="row">
-						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-							<span class="heading-meta">View Task Info</span>
-							<h2 class="colorlib-heading">All you need to know about this task</h2>
-							@if( $uid == $taskdetails->posted_by_id && $taskdetails->status == 'not assigned')
-							@if($taskdetails->due_date < $today)
-								<h4 style="margin-bottom:10px;color:red;">you cannot see and choose any offer when the duedate has past, <Br>change it at the edit task button to accept offer</h4>
-							@endif
-							@if($taskdetails->status != 'assigned' && $taskdetails->status != 'finished')
-							<h4 style="margin-bottom:0px"><a href="/posttasks/{{$taskdetails->id}}" style="margin-bottom:10px">Edit this task's information </a></h4><Br>
-							@endif
-							@endif
-							@if($taskdetails->status == 'assigned' && $today >= $deadlinecancel)
-							<h4 style="margin-bottom:10px;color:red;">you can only cancel your task 2 days before the due date</h4>
-							<h4 style="color:red"><a style="color:red" href="/canceltasks/{{$taskdetails->id}}">cancel this task</a></h4>
-							@endif
-						</div>
-				</div>
+	<div class="colorlib-contact">
+		<div class="colorlib-narrow-content">
+					<div class="row">
+							<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
+								<span class="heading-meta">View Task Info</span>
+								<h2 class="colorlib-heading">All you need to know about this task</h2>
+								@if( $uid == $taskdetails->posted_by_id && $taskdetails->status == 'not assigned')
+								@if($taskdetails->due_date < $today)
+									<h4 style="margin-bottom:10px;color:red;">you cannot see and choose any offer when the duedate has past, <Br>change it at the edit task button to accept offer</h4>
+								@endif
+								@endif
+								@if($taskdetails->status != 'assigned' && $taskdetails->status != 'finished' && $uid == $taskdetails->posted_by_id)
+								<h4 style="margin-bottom:0px"><a href="/posttasks/{{$taskdetails->id}}" style="margin-bottom:10px">Edit this task's information </a></h4><Br>
+								@endif
+								
+								@if($taskdetails->status == 'assigned' && $today <= $deadlinecancel && $uid == $taskdetails->posted_by_id)
+								<h4 style="margin-bottom:10px;color:red;">you can only cancel your task 2 days before the due date</h4>
+								<h4 style="color:red"><a style="color:red" href="/canceltasks/{{$taskdetails->id}}">cancel this task</a></h4>
+								@endif
+								
+							</div>
+					</div>
 				@if(\Session::has('alert-failed'))
 					<div class="alert alert-failed">
 						<div style="color:red">{{Session::get('alert-failed')}}</div>
@@ -43,38 +45,44 @@
 										<p>Due Date: {{$taskdetails->due_date}}</p>
 										<p>Address: {{$taskdetails->address}}</p>
 										<p>Job Description: {{$taskdetails->job_description}}</p>
-								@if($taskdetails->images)
-								@foreach(json_decode($taskdetails->images, true) as $image)
-									<div class="itm" style="width: 300px; 
-									height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
-									">
-									(right click->view image at new tab) for better experience
-									<img src="{{ URL::to('/images/'.$image)}}" >
-									</div>
-								@endforeach
-								@endif
-								<br>
-							@if( $uid == $taskdetails->posted_by_id && $taskdetails->status == 'not assigned')
-							<h4>Upload new image ?</h4>
-							<form method="post" action="/uploadpic/{{$taskdetails->id}}" enctype="multipart/form-data">
-									@csrf
-									<div class="input-group control-group increment">
-											<div class="form-group">
-												<span class="heading-meta">upload new image</span>
-												<input type="file" name="pic[]" class="form-control" multiple>
+										@if($taskdetails->images)
+										@foreach(json_decode($taskdetails->images, true) as $image)
+											<div class="itm" style="width: 300px; 
+											height: 500px; white-space: nowrap; overflow-x:scroll;  overflow-y:scroll; 
+											">
+											(right click->view image at new tab) for better experience
+											<img src="{{ URL::to('/images/'.$image)}}" >
 											</div>
-									</div>
-									<div class="form-group">
-											<input type="submit" class="btn btn-primary btn-send-message" value="Upload image">
-									</div>
-							</form>
-							@endif
-							</span>
-							@if($taskdetails->status == 'not assigned' && $taskdetails->assigned_tasker == $uid)
+										@endforeach
+										@endif
+										<br>
+										@if( $uid == $taskdetails->posted_by_id && $taskdetails->status == 'not assigned')
+										<h4>Upload new image ?</h4>
+										<form method="post" action="/uploadpic/{{$taskdetails->id}}" enctype="multipart/form-data">
+												@csrf
+												<div class="input-group control-group increment">
+														<div class="form-group">
+															<span class="heading-meta">upload new image</span>
+															<input type="file" name="pic[]" class="form-control" multiple>
+														</div>
+												</div>
+												<div class="form-group">
+														<input type="submit" class="btn btn-primary btn-send-message" value="Upload image">
+												</div>
+										</form>
+										@endif
+									</span>
+							@if($taskdetails->status == 'not assigned' && $taskdetails->assigned_tasker_id == $uid)
 							<input type="button" onclick="location.href='acceptjob/{{$taskdetails->id}}';" target="_blank" class="btn btn-info col-md-10" value="accept the job">
 							<input type="button" onclick="location.href='rejectjob/{{$taskdetails->id}}';" target="_blank" class="btn btn-info col-md-10" value="reject the job">	
 							@endif
-							@if($taskdetails->status == 'report')
+							@if($taskdetails->status == 'assigned' && $taskdetails->assigned_tasker_id == $uid && $today <= $deadlinecancel)
+							<input type="button" onclick="location.href='cancelaccept/{{$taskdetails->id}}';" target="_blank" class="btn btn-info col-md-10" value="cancel your participation on this task">
+							@endif
+							@if($taskdetails->status == 'reported' && $taskdetails->assigned_tasker_id == $uid)
+							<input type="button" onclick="location.href='reportjob/{{$taskdetails->id}}';" target="_blank" class="btn btn-info col-md-10" value="report to admin">	
+							@endif
+							@if($taskdetails->status == 'reported' && $taskdetails->posted_by_id == $uid)
 							<input type="button" onclick="location.href='reportjob/{{$taskdetails->id}}';" target="_blank" class="btn btn-info col-md-10" value="report to admin">	
 							@endif
 							@if($taskdetails->status == 'assigned' && $taskdetails->due_date == $today)
@@ -82,17 +90,27 @@
 							@if($taskdetails->posted_by_id == $uid)
 							<input type="button" onclick="location.href='poster_com/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="worker has finished the job">	
 							<input type="button" onclick="location.href='poster_fail/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="worker has failed to finish job">			
-							@elseif($taskdetails->assigned_tasker_id == $uid)
+							@endif
+							@endif
+							@if($taskdetails->poster_acc == 'completed')
+							@if($taskdetails->assigned_tasker_id == $uid)
 							<input type="button" onclick="location.href='worker_com/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="i has finished the job">
 							<input type="button" onclick="location.href='worker_fail/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="i has failed to finished the job">		
 							@endif
 							@endif
-							@if($taskdetails->posted_by_id == $uid)
+							@if($taskdetails->poster_acc == 'fail')
+							@if($taskdetails->assigned_tasker_id == $uid)
+							<input type="button" onclick="location.href='worker_com/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="i has finished the job">
+							<input type="button" onclick="location.href='worker_fail/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="i has failed to finished the job">		
+							@endif
+							@endif
+							@if($taskdetails->posted_by_id == $uid && $taskdetails->poster_acc == '')
 							<input type="button" onclick="location.href='poster_acc/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="worker has arrived">		
-							@elseif($taskdetails->assigned_tasker_id == $uid)
+							@elseif($taskdetails->assigned_tasker_id == $uid && $taskdetails->worker_acc == '')
 							<input type="button" onclick="location.href='worker_acc/{{$taskdetails->id}}';" class="btn btn-info col-md-10" value="i has arrived">		
 							@endif
-							@if($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not assigned' && $taskdetails->due_date > $today)
+							@endif
+							@if($taskdetails->posted_by_id == $uid && $taskdetails->status == 'not assigned' && $taskdetails->due_date > $today && $taskdetails->assigned_tasker_id == '')
 								@if($offers->isEmpty())
 									<p>Currently no offer</p>
 								@endif
@@ -106,8 +124,7 @@
 									<input type="button" onclick="location.href='viewprofile/{{$offer->user_offer_id}}';" target="_blank" class="btn btn-info col-md-10" value="see this tasker's profile">
 									<input type="button" onclick="location.href='accept_offer/{{$offer->id}}';" class="btn btn-info col-md-10" value="choose this offer">
 								@endforeach
-							@elseif($taskdetails->posted_by_id == $uid && $taskdetails->status == 'assigned')
-								<a href="finish_offer/{{$taskdetails->id}}"><p>Click this when the task is finished</p></a>
+							
 							@elseif($taskdetails->status == 'finished')
 								<p>this task is finished, poster is paid</p>
 							@elseif($taskdetails->posted_by_id !== $uid)
@@ -151,8 +168,8 @@
 							</div>		
 						</div>
 					</div>
-			</div>	
-		</div>
+		</div>	
+	</div>
 @endsection
 	@section('javascript')
 		<script type="text/javascript">
